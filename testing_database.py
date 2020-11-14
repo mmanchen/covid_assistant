@@ -51,8 +51,11 @@ if risk == "YES":
     overall_score = score1[0] + score2[0]
     print("this is your overall score",overall_score)
 
-if 0 <= age <= 3:
+if 0 <= overall_score <= 3:
     print("you belong to the risk group 4: there are no high risks for you but you should still take precautions")
+
+if 4 <= overall_score <= 7:
+    print("you belong to the risk group 3: there is a moderate risk for you and you should take precautions")
 
 
 # mycursor.execute("select score from age where agecol=100")
