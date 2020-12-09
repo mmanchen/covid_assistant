@@ -11,11 +11,11 @@ myresult = mycursor.fetchall()
 print(tabulate(myresult, headers=['country', 'score'], tablefmt='psql'))
 
 dict = {
-    "age": 30,
-    "loc": "Spain",
-    "medical_cond": "diabetes",
-    "smoker": True,
-    "pregnant": True
+    "age": 89,
+    "loc": "Barcelona",
+    "medical_cond": "flu",
+    "smoker": False,
+    "pregnant": False
 }
 # Age
 if 0 <= dict.get("age") <= 69:
