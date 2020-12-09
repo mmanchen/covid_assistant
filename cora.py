@@ -91,12 +91,23 @@ while DM_vec[1]== 0:
 #############################################
 # Part where you extract the info from the database and fill in the profile
 
+filled_slots = {}
+
 for k,v in Frame.items():
-    if  (type(v)!= list) and ((v != 0) or (v == True)):
-        print('slots that are filled:', k, 'values:', v)
-    elif (type(v)== list) and (len(v) != 0):
-        print('slots that are filled:', k, 'values:', v)
-        
+    if (k=='age') and (f.is_number(v) == True):
+        filled_slots[k] = v
+    if (k=='live_in'):
+        filled_slots['loc'] = v
+    if (k=='med_cond_risk'):
+        filled_slots['medical_risk'] += v
+    if (k == 'med_cond') and ('pregnant' in v):
+        filled_slots['pregnant'] = True
+    if (k=='smoker') and (type(v) == bool):
+        filled_slots['smoker'] = v
+
+print(filled_slots)
+
+dict = filled_slots
 #Check database
 
 mydb = mysql.connector.connect(host="localhost", user="root", password="hola123", database="nli_db")
