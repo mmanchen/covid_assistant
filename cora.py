@@ -99,7 +99,7 @@ for k,v in Frame.items():
     if (k=='live_in'):
         filled_slots['loc'] = v
     if (k=='med_cond_risk'):
-        filled_slots['medical_risk'] += v
+        filled_slots['medical_risk'] = np.sum(v)
     if (k == 'med_cond') and ('pregnant' in v):
         filled_slots['pregnant'] = True
     if (k=='smoker') and (type(v) == bool):
