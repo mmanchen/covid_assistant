@@ -65,6 +65,7 @@ def wait_input():
     
     return answer
 
+
 def is_number(s):
     try:
         float(s)
