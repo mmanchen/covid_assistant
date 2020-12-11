@@ -2,6 +2,7 @@ import spacy
 import en_core_web_sm
 from spacy.strings import StringStore,hash_string
 from datetime import date
+import numpy as np
 
 nlp = en_core_web_sm.load()
 
@@ -18,13 +19,13 @@ def check_filled_slots(Frame):
     filled_slots = {}
 
     for k,v in Frame.items():
-        if (k=='age') and (f.is_number(v) == True):
-            filled_slots[k] = v
+        if (k=='age') and (is_number(v) == True):
+            filled_slots[k] = int(v)
         if (k=='live_in'):
             filled_slots['loc'] = v
         if (k=='med_cond_risk'):
             filled_slots['medical_risk'] = np.sum(v)
-        if (k == 'med_cond') and ('pregnant' in v[0]):
+        if (k == 'med_cond') and ('pregnant' in v):
             filled_slots['pregnant'] = True
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
