@@ -3,6 +3,7 @@ import en_core_web_sm
 from spacy.strings import StringStore,hash_string
 from datetime import date
 import numpy as np
+import random
 
 nlp = en_core_web_sm.load()
 
@@ -12,6 +13,51 @@ import time
 
 from threading import Thread
 
+
+def respond_to_intents(Intents,Frame):
+    
+# remember Intents={'greeting': False, 'thank': False, 'accept': False,'deny':False,'goodbye': False, 'ask_help':False }
+    responses = []
+    name = Frame['name']
+    
+    if Intents['ask_help'] == True:
+        responses.append(random.choice(['Of course I will help!','Sure!','I will be glad to.']))
+
+    if Intents['greeting'] == True:
+        if name != 0:
+            responses.append(random.choice(['Nice to meet you {}.'.format(name),'Hey {}!'.format(name)]))
+        else:   
+            responses.append(random.choice(['Nice to meet you.','Hey there!']))
+    
+    if Intents['thank']== True:
+        if name != 0:
+            responses.append(random.choice(['You are welcome {}'.format(name),'No problem{}'.format(name)]))
+        else:   
+            responses.append(random.choice(['You are welcome','anytime!','No problem.']))
+            
+    if Intents['accept']== True:
+        
+        responses.append(random.choice(['Perfect then.','Lets do this!','Gotcha!']))
+        
+    if Intents['deny']== True:
+        
+        responses.append(random.choice(['Alright then.']))
+        
+    if Intents['goodbye']== True:
+        if name != 0:
+            responses.append(random.choice(['Goodbye {}!'.format(name),'Farewell {}.'.format(name),'Take care {}.'.format(name)]))
+        else:   
+            responses.append(random.choice(['Goodbye!','Farewell','Take care', 'I will be here if you need me again :)']))
+    
+    print(responses)
+    #responses = random.shuffle(responses)
+    
+    response = ''.join(responses)
+        
+    return response
+    
+    
+    
 
 def check_filled_slots(Frame):
     #Returns a dictionary of the filled slots in order to search the  database
@@ -25,7 +71,7 @@ def check_filled_slots(Frame):
             filled_slots['loc'] = v
         if (k=='med_cond_risk'):
             filled_slots['medical_risk'] = np.sum(v)
-        if (k == 'med_cond') and ('pregnant' in v):
+        if (k == 'med_cond') and ('pregnant' in s for s in v):
             filled_slots['pregnant'] = True
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
@@ -64,6 +110,7 @@ def wait_input():
     answer = input("Enter your sentence: ")
     
     return answer
+
 
 def is_number(s):
     try:
