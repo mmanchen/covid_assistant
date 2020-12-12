@@ -311,6 +311,11 @@ def prepare_pipeline():
                {'LEMMA': 'be'},
                {'ENT_TYPE': 'PERSON'}]
             
+            subject4 = [{'POS': 'PRON'},
+               {'LOWER': 'name'},
+               {'LEMMA': 'be'},
+               {'ENT_TYPE': 'PERSON'}]
+            
             subject3 = [{'LOWER': 'my'},
                        {'POS': 'NOUN'},
                           {'ENT_TYPE': 'PERSON'},
