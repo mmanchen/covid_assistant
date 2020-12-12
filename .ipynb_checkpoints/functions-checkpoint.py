@@ -13,6 +13,7 @@ import time
 
 from threading import Thread
 import mysql.connector
+from tabulate import tabulate
 
 mydb = mysql.connector.connect(host="localhost", user="root", password="hola123", database="nli_db")
 mycursor = mydb.cursor()
