@@ -92,34 +92,34 @@ while conversation == True:
                 have_age =True
 
 
-            #Here we need to check if the country is in our list
+        #Here we need to check if the country is in our list
             
-            mycursor.execute("SELECT score FROM location WHERE country=%s", location)
-            data = [x[0] for x in mycursor.fetchall()]
+        mycursor.execute("SELECT score FROM location WHERE country=%s", location)
+        data = [x[0] for x in mycursor.fetchall()]
 
-            if data:
-                is_country= True
-            else:
-                is_country =False
+        if data:
+            is_country= True
+        else:
+            is_country =False
                 
         print("The location you gave is not a country")
             
-            if (Frame['live_in'] == 0):
-                print("Where do you live?")
-                input_text = f.wait_input()
-                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-                response= f.respond_to_intents(Intents,Frame)
-                print(response)
-                Intents = f.init_intent()
-            elif is_country == False:
-                print("Sorry the location you specify is either not a country or is not in my list")
-                input_text = f.wait_input()
-                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-                response= f.respond_to_intents(Intents,Frame)
-                print(response)
-                Intents = f.init_intent() 
-            else:
-                have_loc = True
+        if (Frame['live_in'] == 0):
+            print("Where do you live?")
+            input_text = f.wait_input()
+            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+            response= f.respond_to_intents(Intents,Frame)
+            print(response)
+            Intents = f.init_intent()
+        elif is_country == False:
+            print("Sorry the location you specify is either not a country or is not in my list")
+            input_text = f.wait_input()
+            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+            response= f.respond_to_intents(Intents,Frame)
+            print(response)
+            Intents = f.init_intent() 
+        else:
+            have_loc = True
 
 
     #############################################
