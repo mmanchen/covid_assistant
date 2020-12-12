@@ -109,52 +109,11 @@ while conversation == True:
 
     filled_slots= f.check_filled_slots(Frame)
 
-    dict = filled_slots
-    #Check database
+    filled_slots_scores = f.check_database(filled_slots)
+    
+    risk_level = f.sum_risk
 
-    if 0 <= dict.get("age") <= 69:
-        mycursor.execute("select score from age where agecol=1")
-        score1 = [x[0] for x in mycursor.fetchall()]
-        print("your age risk (", dict.get("age"), ") is", score1)
-
-    if 70 <= dict.get("age") <= 100:
-        mycursor.execute("select score from age where agecol=100")
-        score1 = [x[0] for x in mycursor.fetchall()]
-        print("your age risk (", dict.get("age"), ") is", score1)
-
-        # Country
-    mycursor.execute("SELECT score FROM location WHERE country=%s", (dict.get("loc"),))
-    data = [x[0] for x in mycursor.fetchall()]
-
-    if data:
-        print("your country risk (", dict.get("loc"), ") is", data)
-
-    else:
-        print("Location does not exist")
-
-    # Smoker
-    if dict.get("smoker"):
-        mycursor.execute("select score from smoker where smokercol='True'")
-        score2 = [x[0] for x in mycursor.fetchall()]
-        print("your smoker risk (", dict.get("smoker"), ") is", score1)
-
-    else:
-        mycursor.execute("select score from smoker where smokercol='False'")
-        score2 = [x[0] for x in mycursor.fetchall()]
-        print("your smoker risk (", dict.get("smoker"), ") is", score1)
-
-    # Pregnant
-    if dict.get("pregnant"):
-        mycursor.execute("select score from pregnant where pregnantcol='True'")
-        score3 = [x[0] for x in mycursor.fetchall()]
-        print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
-
-    else:
-        mycursor.execute("select score from pregnant where pregnantcol='False'")
-        score3 = [x[0] for x in mycursor.fetchall()]
-        print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
-
-    print("Your profile is...")
+    print("Your total risk index is: {}".format(risk_level))
     #############################################
 
 

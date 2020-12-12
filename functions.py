@@ -12,7 +12,73 @@ from spacy.tokens import Token,Span
 import time
 
 from threading import Thread
+mydb = mysql.connector.connect(host="localhost", user="root", password="hola123", database="nli_db")
+mycursor = mydb.cursor()
 
+
+def check_database(filled_slots):
+
+    dict = filled_slots
+    #Check database
+
+    if 0 <= dict.get("age") <= 69:
+        mycursor.execute("select score from age where agecol=1")
+        score1 = [x[0] for x in mycursor.fetchall()]
+        print("your age risk (", dict.get("age"), ") is", score1)
+
+    if 70 <= dict.get("age") <= 100:
+        mycursor.execute("select score from age where agecol=100")
+        score1 = [x[0] for x in mycursor.fetchall()]
+        print("your age risk (", dict.get("age"), ") is", score1)
+
+        # Country
+    mycursor.execute("SELECT score FROM location WHERE country=%s", (dict.get("loc"),))
+    data = [x[0] for x in mycursor.fetchall()]
+
+    if data:
+        print("your country risk (", dict.get("loc"), ") is", data)
+
+    else:
+        print("Location does not exist")
+
+    # Smoker
+    if dict.get("smoker"):
+        mycursor.execute("select score from smoker where smokercol='True'")
+        score2 = [x[0] for x in mycursor.fetchall()]
+        print("your smoker risk (", dict.get("smoker"), ") is", score1)
+
+    else:
+        mycursor.execute("select score from smoker where smokercol='False'")
+        score2 = [x[0] for x in mycursor.fetchall()]
+        print("your smoker risk (", dict.get("smoker"), ") is", score1)
+
+    # Pregnant
+    if dict.get("pregnant"):
+        mycursor.execute("select score from pregnant where pregnantcol='True'")
+        score3 = [x[0] for x in mycursor.fetchall()]
+        print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
+
+    else:
+        mycursor.execute("select score from pregnant where pregnantcol='False'")
+        score3 = [x[0] for x in mycursor.fetchall()]
+        print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
+        
+    filled_slots['age_score'] = score1
+    filled_slots['loc_score'] = data
+    filled_slots['smoker_score'] = score2
+    filled_slots['pregnant'] = score3
+    
+    return filled_slots
+
+def sum_risk(filled_slots_score, Frame):
+    
+    total_sum= int(filled_slots_score['age_score'])+ int(filled_slots['loc_score'])+
+    int(filled_slots['smoker_score'])+ int(filled_slots['pregnant'])+int(filled_slots['medical_risk'])
+    
+    return total_sum
+    
+    
+    
 
 def respond_to_intents(Intents,Frame):
     
