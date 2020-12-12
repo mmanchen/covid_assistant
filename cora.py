@@ -93,13 +93,23 @@ while conversation == True:
 
 
             #Here we need to check if the country is in our list
+            
+            check_loc = f.is_country(Frame['live_in'])
+            
             if (Frame['live_in'] == 0):
-                print(" Sorry the location you specify is either not a country or is not in our list")
+                print("Where do you live?")
                 input_text = f.wait_input()
                 Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
                 response= f.respond_to_intents(Intents,Frame)
                 print(response)
                 Intents = f.init_intent()
+            elif check_loc == False:
+                print("Sorry the location you specify is either not a country or is not in my list")
+                input_text = f.wait_input()
+                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+                response= f.respond_to_intents(Intents,Frame)
+                print(response)
+                Intents = f.init_intent() 
             else:
                 have_loc = True
 
@@ -137,16 +147,26 @@ while conversation == True:
                 Intents = f.init_intent()
 
 
+     #############################################
+    # Part where you extract the info from the database and fill in the profile
+    #!!!!!If we did manage to get more information:
+    # here we would repeat the connection to the database and the profiling, otherwise we continue
+    
     empty_slots_2= f.check_empty_slots(Frame)
     if empty_slots_2 != empty_slots:
-        filled_slots= f.check_filled_slots(Frame)
+        #filled_slots= f.check_filled_slots(Frame)
 
-        dict = filled_slots
+        #filled_slots= f.check_filled_slots(Frame)
 
+        #filled_slots_scores = f.check_database(filled_slots)
+    
+        risk_level = f.sum_risk
 
-        #!!!!!If we did manage to get more information:
-        # here we would repeat the connection to the database and the profiling, otherwise we continue
+        print("Your total risk index is: {}".format(risk_level))
+        
+    #############################################
 
+    
     #This part tries to see if we need another profiling or we say goodbye
     while DM_vec[3] == 0:
         print('Would you like to know the profile of another person? Maybe your sister, your uncle..')

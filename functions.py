@@ -16,6 +16,17 @@ mydb = mysql.connector.connect(host="localhost", user="root", password="hola123"
 mycursor = mydb.cursor()
 
 
+def is_country(location):
+    
+    mycursor.execute("SELECT score FROM location WHERE country=%s", location)
+    data = [x[0] for x in mycursor.fetchall()]
+
+    if data:
+        is_country= True
+    else:
+        is_country =False
+        print("The location you gave is not a country")
+
 def check_database(filled_slots):
 
     dict = filled_slots
@@ -72,12 +83,10 @@ def check_database(filled_slots):
 
 def sum_risk(filled_slots_score, Frame):
     
-    total_sum= int(filled_slots_score['age_score'])+ int(filled_slots['loc_score'])+
-    int(filled_slots['smoker_score'])+ int(filled_slots['pregnant'])+int(filled_slots['medical_risk'])
+    total_sum= int(filled_slots_score['age_score'])+ int(filled_slots['loc_score'])+int(filled_slots['smoker_score'])
+    total_sum= total_sum+ int(filled_slots['pregnant'])+int(filled_slots['medical_risk'])
     
     return total_sum
-    
-    
     
 
 def respond_to_intents(Intents,Frame):
