@@ -56,22 +56,22 @@ else:
 # Smoker
 if dict.get("smoker"):
     mycursor.execute("select score from smoker where smokercol='True'")
-    score1 = [x[0] for x in mycursor.fetchall()]
+    score2 = [x[0] for x in mycursor.fetchall()]
     print("your smoker risk (", dict.get("smoker"), ") is", score1)
 
 else:
     mycursor.execute("select score from smoker where smokercol='False'")
-    score1 = [x[0] for x in mycursor.fetchall()]
+    score2 = [x[0] for x in mycursor.fetchall()]
     print("your smoker risk (", dict.get("smoker"), ") is", score1)
 
 # Pregnant
 if dict.get("pregnant"):
     mycursor.execute("select score from pregnant where pregnantcol='True'")
-    score1 = [x[0] for x in mycursor.fetchall()]
+    score3 = [x[0] for x in mycursor.fetchall()]
     print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
 
 else:
     mycursor.execute("select score from pregnant where pregnantcol='False'")
-    score1 = [x[0] for x in mycursor.fetchall()]
+    score3 = [x[0] for x in mycursor.fetchall()]
     print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
 
