@@ -12,6 +12,8 @@ from spacy.tokens import Token,Span
 import time
 
 from threading import Thread
+import mysql.connector
+
 mydb = mysql.connector.connect(host="localhost", user="root", password="hola123", database="nli_db")
 mycursor = mydb.cursor()
 
@@ -81,7 +83,7 @@ def check_database(filled_slots):
     
     return filled_slots
 
-def sum_risk(filled_slots_score, Frame):
+def sum_risk(filled_slots_score):
     
     total_sum= int(filled_slots_score['age_score'])+ int(filled_slots['loc_score'])+int(filled_slots['smoker_score'])
     total_sum= total_sum+ int(filled_slots['pregnant'])+int(filled_slots['medical_risk'])

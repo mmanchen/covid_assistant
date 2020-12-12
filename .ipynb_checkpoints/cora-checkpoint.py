@@ -121,7 +121,7 @@ while conversation == True:
 
     filled_slots_scores = f.check_database(filled_slots)
     
-    risk_level = f.sum_risk
+    risk_level = f.sum_risk(filled_slots_scores)
 
     print("Your total risk index is: {}".format(risk_level))
     #############################################
@@ -154,13 +154,13 @@ while conversation == True:
     
     empty_slots_2= f.check_empty_slots(Frame)
     if empty_slots_2 != empty_slots:
-        #filled_slots= f.check_filled_slots(Frame)
+        filled_slots= f.check_filled_slots(Frame)
 
-        #filled_slots= f.check_filled_slots(Frame)
+        filled_slots= f.check_filled_slots(Frame)
 
-        #filled_slots_scores = f.check_database(filled_slots)
+        filled_slots_scores = f.check_database(filled_slots)
     
-        risk_level = f.sum_risk
+        risk_level = f.sum_risk(filled_slots_scores)
 
         print("Your total risk index is: {}".format(risk_level))
         
