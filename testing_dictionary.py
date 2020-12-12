@@ -12,10 +12,10 @@ print(tabulate(myresult, headers=['country', 'score'], tablefmt='psql'))
 
 dict = {
     "age": 89,
-    "loc": "Barcelona",
+    "loc": "Spain",
     "medical_cond": "flu",
-    "smoker": False,
-    "pregnant": False
+    "smoker": "False",
+    "pregnant": "False"
 }
 # Age
 if 0 <= dict.get("age") <= 69:
