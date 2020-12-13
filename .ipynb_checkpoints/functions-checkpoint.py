@@ -56,7 +56,7 @@ def respond_to_intents(Intents,Frame):
         else:   
             responses.append(random.choice(['Goodbye!','Farewell','Take care', 'I will be here if you need me again :)']))
     
-    print(responses)
+    #print(responses)
     #responses = random.shuffle(responses)
     
     response = ''.join(responses)

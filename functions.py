@@ -4,7 +4,6 @@ from spacy.strings import StringStore,hash_string
 from datetime import date
 import numpy as np
 import random
-from tabulate import tabulate
 nlp = en_core_web_sm.load()
 
 from spacy.matcher import Matcher
@@ -57,7 +56,7 @@ def respond_to_intents(Intents,Frame):
         else:   
             responses.append(random.choice(['Goodbye!','Farewell','Take care', 'I will be here if you need me again :)']))
     
-    print(responses)
+    #print(responses)
     #responses = random.shuffle(responses)
     
     response = ''.join(responses)
@@ -80,7 +79,7 @@ def check_filled_slots(Frame):
         if (k=='med_cond_risk'):
             filled_slots['medical_risk'] = np.sum(v)
         if (k == 'med_cond') and ('pregnant' in s for s in v):
-            filled_slots['pregnant'] = v
+            filled_slots['pregnant'] = True
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
 
