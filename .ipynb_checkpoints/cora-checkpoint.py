@@ -92,34 +92,34 @@ while conversation == True:
                 have_age =True
 
 
-        #Here we need to check if the country is in our list
+            #Here we need to check if the country is in our list
             
-        mycursor.execute("SELECT score FROM location WHERE country=%s", location)
-        data = [x[0] for x in mycursor.fetchall()]
+            mycursor.execute("SELECT score FROM location WHERE country=%s", location)
+            data = [x[0] for x in mycursor.fetchall()]
 
-        if data:
-            is_country= True
-        else:
-            is_country =False
+            if data:
+                is_country= True
+            else:
+                is_country =False
                 
         print("The location you gave is not a country")
-            
+
         if (Frame['live_in'] == 0):
-            print("Where do you live?")
-            input_text = f.wait_input()
-            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-            response= f.respond_to_intents(Intents,Frame)
-            print(response)
-            Intents = f.init_intent()
+                print("Where do you live?")
+                input_text = f.wait_input()
+                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+                response= f.respond_to_intents(Intents,Frame)
+                print(response)
+                Intents = f.init_intent()
         elif is_country == False:
-            print("Sorry the location you specify is either not a country or is not in my list")
-            input_text = f.wait_input()
-            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-            response= f.respond_to_intents(Intents,Frame)
-            print(response)
-            Intents = f.init_intent() 
+                print("Sorry the location you specify is either not a country or is not in my list")
+                input_text = f.wait_input()
+                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+                response= f.respond_to_intents(Intents,Frame)
+                print(response)
+                Intents = f.init_intent() 
         else:
-            have_loc = True
+                have_loc = True
 
 
     #############################################
@@ -151,35 +151,54 @@ while conversation == True:
         print("Location does not exist")
 
     # Smoker
-    if dict.get("smoker"):
-        mycursor.execute("select score from smoker where smokercol='True'")
+    if dict.get("smoker")==True:
+        mycursor.execute("SELECT score FROM smoker where smokercol='True'")
         score2 = [x[0] for x in mycursor.fetchall()]
-        print("your smoker risk (", dict.get("smoker"), ") is", score1)
+        print("your smoker risk (", dict.get("smoker"), ") is", score2)
 
     else:
         mycursor.execute("select score from smoker where smokercol='False'")
         score2 = [x[0] for x in mycursor.fetchall()]
-        print("your smoker risk (", dict.get("smoker"), ") is", score1)
+        print("your smoker risk (", dict.get("smoker"), ") is", score2)
 
     # Pregnant
-    if dict.get("pregnant"):
+    if dict.get("pregnant")==True:
         mycursor.execute("select score from pregnant where pregnantcol='True'")
         score3 = [x[0] for x in mycursor.fetchall()]
-        print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
+        print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
 
     else:
         mycursor.execute("select score from pregnant where pregnantcol='False'")
         score3 = [x[0] for x in mycursor.fetchall()]
-        print("your pregnant risk (", dict.get("pregnant"), ") is", score1)
-        
-    filled_slots['age_score'] = score1
-    filled_slots['loc_score'] = data
-    filled_slots['smoker_score'] = score2
-    filled_slots['pregnant'] = score3
-    
-    risk_level = f.sum_risk(filled_slots)
+        print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
 
-    print("Your total risk index is: {}".format(risk_level))
+    list_results = score1 + data + score2 + score3
+    print("these are the results of the scores obtained ", list_results)
+    overall_score = score1[0] + data[0] + score2[0] + score3[0]
+    print("Your total risk index is", overall_score)
+
+    if overall_score == 0:
+        print("You belong to the risk group 1: there are no risks for you, but that doesn’t mean you can’t have bad luck, be careful!")
+
+    if 1 <= overall_score <= 2:
+        print("You belong to the risk group 2: there are low risks for you but you should still take precautions")
+
+    if 3 <= overall_score <= 4:
+        print(" You belong to the risk group 3: there is a moderate risk for you and you should be cautious.")
+
+    if overall_score >= 5:
+        print("You belong to the risk group 4:  there is a high risk for you and you should take high precautions.")
+
+
+        
+    # filled_slots['age_score'] = score1
+    # filled_slots['loc_score'] = data
+    # filled_slots['smoker_score'] = score2
+    # filled_slots['pregnant'] = score3
+    #
+    # risk_level = f.sum_risk(filled_slots)
+    #
+    # print("Your total risk index is: {}".format(risk_level))
     #############################################
 
 
