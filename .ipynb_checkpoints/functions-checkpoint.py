@@ -192,6 +192,7 @@ def prepare_pipeline():
                      {'LOWER':'the','OP':'?'},
                      {'LOWER': 'risk'}]
             
+            ask_4 = [{'POS':'PRON'},{'LEMMA':'need'},{'LEMMA':'help'}]
             
 
 
@@ -201,7 +202,7 @@ def prepare_pipeline():
             self.matcher.add('Accept',[accept_1,accept_2])
             self.matcher.add('Deny',[deny_1,deny_2])
             self.matcher.add('Goodbye',[goodbye_1,goodbye_2,goodbye_3])
-            self.matcher.add('Ask',[ask_1,ask_2,ask_3])
+            self.matcher.add('Ask',[ask_1,ask_2,ask_3,ask_4])
 
 
             Token.set_extension("is_thanking",default=False)
@@ -289,6 +290,8 @@ def prepare_pipeline():
                    {'LIKE_NUM': True},
                    {'LEMMA': 'year','OP':'?'},
                    {'ORTH': 'old','OP':'?'}]
+            
+            age_2= [{'LIKE_NUM': True}]
 
             smoke1 = [{'DEP': 'nsubj','OP':'?'},
                       {'LEMMA':'DO','OP':'?'},
@@ -346,6 +349,8 @@ def prepare_pipeline():
               {'LEMMA':'live'},
               {'LOWER': 'in'},
               {'ENT_TYPE':'GPE'}]
+            
+            live_in3 = [{'ENT_TYPE':'GPE'}]
 
             medical2_1 = [{'LOWER':'not','OP':'!'},
                           {'LOWER':{"REGEX":"(severe|bad|terrible|strong)"},'OP':'?'},
@@ -418,7 +423,7 @@ def prepare_pipeline():
 
             self.matcher.add('smoking pattern',[smoke1,smoke2])
             self.matcher.add('not smoking pattern',[smoke1_n,smoke2_n])
-            self.matcher.add('Age',[age_1])
+            self.matcher.add('Age',[age_1,age_2])
             self.matcher.add('Personal',[subject1,subject2,subject3])
             self.matcher.add('Pronoun',[subject_p1,subject_p2])
             self.matcher.add('Location',[live_in1,live_in2])
