@@ -14,8 +14,8 @@ dict = {
     "age": 89,
     "loc": "Spain",
     "medical_cond": "flu",
-    "smoker": "False",
-    "pregnant": "False"
+    "smoker": True,
+    "pregnant": False
 }
 # Age
 if 0 <= dict.get("age") <= 69:
@@ -54,15 +54,15 @@ else:
     print("Medical Condition does not exist")
 
 # Smoker
-if dict.get("smoker"):
+if dict.get("smoker")==True:
     mycursor.execute("select score from smoker where smokercol='True'")
     score2 = [x[0] for x in mycursor.fetchall()]
-    print("your smoker risk (", dict.get("smoker"), ") is", score1)
+    print("your smoker risk (", dict.get("smoker"), ") is", score2)
 
 else:
     mycursor.execute("select score from smoker where smokercol='False'")
     score2 = [x[0] for x in mycursor.fetchall()]
-    print("your smoker risk (", dict.get("smoker"), ") is", score1)
+    print("your smoker risk (", dict.get("smoker"), ") is", score2)
 
 # Pregnant
 if dict.get("pregnant"):
