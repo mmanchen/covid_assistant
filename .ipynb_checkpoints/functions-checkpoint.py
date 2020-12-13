@@ -171,6 +171,8 @@ def prepare_pipeline():
             deny_1 = [{'LEMMA': 'no'},{'IS_PUNCT':True}]
 
             deny_2 = [{'POS':'PRON'},{'LEMMA':'do','OP':'?'}, {'LEMMA': 'not'},{'LEMMA':{"REGEX":"(want|agree|accept)"}}]
+            deny_3 = [{'LEMMA': 'no'},{'LEMMA':'thank'}]
+            deny_4 = [{'LEMMA': 'no'}]
 
             goodbye_1 = [{'LEMMA': 'good'},{'LEMMA': 'bye'}]
 
