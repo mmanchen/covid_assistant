@@ -74,7 +74,8 @@ while conversation == True:
         if (Frame['live_in'] != 0):
             have_loc = True
 
-        responses = []
+        responses1 = []
+        responses2 = []
         #Here the subject is missing but it needs to be added
         if (have_age == True) and (have_loc == True):
             DM_vec[1] = 1
@@ -83,17 +84,17 @@ while conversation == True:
             resp1= 'I will need to ask you a few more questions to fill the query up...'
             resp2 = 'The profile needs some extra required information...'
             resp3 = "I'm missing some information that is vital in order to provide this service properly..."
-            responses.append(random.choice([resp1,resp2,resp3]))
+            responses1.append(random.choice([resp1,resp2,resp3]))
+            responses2.append(random.choice([resp1,resp2,resp3]))
             
 
         if (Frame['age'] == 0) or (f.is_number(Frame['age']) == False):
             resp1= "Let's start with age, could you provide this information?"
             resp2 = "Age is important for this profiling, please provide this information."
             resp3 = "Without the age I'm sorry but I can't do much."
-            responses.append(random.choice([resp1,resp2,resp3]))
-            response = ''.join(responses)
+            responses1.append(random.choice([resp1,resp2,resp3]))
+            response = ''.join(responses1)
             print(response)
-            responses= [responses[0]]
             input_text = f.wait_input()
             Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
             response_int= f.respond_to_intents(Intents,Frame)
@@ -106,8 +107,9 @@ while conversation == True:
 
         #Here we need to check if the country is in our list
             
-        mycursor.execute("SELECT score FROM location WHERE country=%s", location)
-        data = [x[0] for x in mycursor.fetchall()]
+        #mycursor.execute("SELECT score FROM location WHERE country=%s", location)
+        #data = [x[0] for x in mycursor.fetchall()]
+        data= 1
         if data:
             is_country= True
         else:
@@ -118,9 +120,10 @@ while conversation == True:
             resp1= "The location is important to know in order to assess the location risk!"
             resp2 = "I would need to know the country in order to adapt the profiling to the current risk"
             resp3 = "In which country are we assesing the risk?"
-            responses.append(random.choice([resp1,resp2,resp3]))
-            response = ''.join(responses)
+            responses2.append(random.choice([resp1,resp2,resp3]))
+            response = ''.join(responses2)
             print(response)
+            responses2 = [responses2[0]]
             input_text = f.wait_input()
             Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
             response_int= f.respond_to_intents(Intents,Frame)
@@ -131,9 +134,10 @@ while conversation == True:
             resp1= "Oh sorry! Maybe I forgot to say that the location needs to be a country!"
             resp2 = "Hm.. I can't find this location in my database. Could you specify the country?"
             resp3 = "I got a little bit lost, which country is it?"
-            responses.append(random.choice([resp1,resp2,resp3]))
-            response = ''.join(responses)
+            responses2.append(random.choice([resp1,resp2,resp3]))
+            response = ''.join(responses2)
             print(response)
+            responses2 = [responses2[0]]
             input_text = f.wait_input()
             Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
             response_int= f.respond_to_intents(Intents,Frame)
