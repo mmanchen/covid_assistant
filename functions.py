@@ -192,6 +192,7 @@ def prepare_pipeline():
                      {'LOWER':'the','OP':'?'},
                      {'LOWER': 'risk'}]
             
+            ask_4 = [{'POS':'PRON'},{'LEMMA':'need'},{'LEMMA':'help'}]
             
 
 
@@ -201,7 +202,7 @@ def prepare_pipeline():
             self.matcher.add('Accept',[accept_1,accept_2])
             self.matcher.add('Deny',[deny_1,deny_2])
             self.matcher.add('Goodbye',[goodbye_1,goodbye_2,goodbye_3])
-            self.matcher.add('Ask',[ask_1,ask_2,ask_3])
+            self.matcher.add('Ask',[ask_1,ask_2,ask_3,ask_4])
 
 
             Token.set_extension("is_thanking",default=False)
