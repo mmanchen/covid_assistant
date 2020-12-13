@@ -4,7 +4,6 @@ from spacy.strings import StringStore,hash_string
 from datetime import date
 import numpy as np
 import random
-
 nlp = en_core_web_sm.load()
 
 from spacy.matcher import Matcher
