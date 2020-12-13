@@ -103,22 +103,22 @@ while conversation == True:
                 is_country =False
                 
         print("The location you gave is not a country")
-            
-            if (Frame['live_in'] == 0):
+
+        if (Frame['live_in'] == 0):
                 print("Where do you live?")
                 input_text = f.wait_input()
                 Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
                 response= f.respond_to_intents(Intents,Frame)
                 print(response)
                 Intents = f.init_intent()
-            elif is_country == False:
+        elif is_country == False:
                 print("Sorry the location you specify is either not a country or is not in my list")
                 input_text = f.wait_input()
                 Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
                 response= f.respond_to_intents(Intents,Frame)
                 print(response)
                 Intents = f.init_intent() 
-            else:
+        else:
                 have_loc = True
 
 

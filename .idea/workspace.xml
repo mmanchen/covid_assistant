@@ -21,8 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="21a6ef21-2f0e-4b56-9e06-fe4ed422bc9f" name="Default Changelist" comment="changes cora.py">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cora.py" beforeDir="false" afterPath="$PROJECT_DIR$/cora.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing_dictionary.py" beforeDir="false" afterPath="$PROJECT_DIR$/testing_dictionary.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607766443245</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="changes cora.py">
+      <created>1607773647709</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1607773647709</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -295,22 +302,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="147" y="62" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1607765679415" />
-    <state width="1500" height="210" key="GridCell.Tab.0.bottom" timestamp="1607773148560">
+    <state width="1500" height="210" key="GridCell.Tab.0.bottom" timestamp="1607773945495">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1500" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607773148560" />
-    <state width="1500" height="210" key="GridCell.Tab.0.center" timestamp="1607773148559">
+    <state width="1500" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607773945495" />
+    <state width="1500" height="210" key="GridCell.Tab.0.center" timestamp="1607773945494">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1500" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607773148559" />
-    <state width="1500" height="210" key="GridCell.Tab.0.left" timestamp="1607773148559">
+    <state width="1500" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607773945494" />
+    <state width="1500" height="210" key="GridCell.Tab.0.left" timestamp="1607773945494">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1500" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607773148559" />
-    <state width="1500" height="210" key="GridCell.Tab.0.right" timestamp="1607773148559">
+    <state width="1500" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607773945494" />
+    <state width="1500" height="210" key="GridCell.Tab.0.right" timestamp="1607773945494">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1500" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607773148559" />
+    <state width="1500" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607773945494" />
     <state x="411" y="177" key="MultipleFileMergeDialog" timestamp="1607765969637">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -319,9 +326,9 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1605269741598" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1607766460996">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1607773655893">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1607766460996" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1607773655893" />
   </component>
 </project>
