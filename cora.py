@@ -198,9 +198,10 @@ while conversation == True:
         score3 = [x[0] for x in mycursor.fetchall()]
         print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
 
-    list_results = score1 + data + score2 + score3
+    med_score  = np.sum(Frame['med_cond_risk'])
+    list_results = score1 + data + score2 + score3 + [med_score]
     print("these are the results of the scores obtained ", list_results)
-    overall_score = score1[0] + data[0] + score2[0] + score3[0]
+    overall_score = score1[0] + data[0] + score2[0] + score3[0] + med_score
     print("Your total risk index is", overall_score)
 
     if overall_score == 0:
@@ -233,11 +234,32 @@ while conversation == True:
         
         
         empty_slots= f.check_empty_slots(Frame)
-
-        print(filled_slots)
         
         if len(empty_slots) == 0:
             DM_vec[2]=1
+        
+        intro = []
+        part1 = "Let's see, at the moment we have that (pronoun) age is {} years old and (pronoun) live in {}, ".format(Frame['age'],Frame['live_in'])
+        intro.append(part1)
+        
+        if type(Frame['smoker']) == bool:
+            if Frame['smoker'] == True:
+                part3 = "you smoke, "
+                intro.append(part3)
+            if Frame['smoker'] == True:
+                part3 = "you don't smoke, "
+                intro.append(part3)
+                
+        if len(Frame['med_cond_risk']) >0:
+            part4 = "and you have certain medical conditions that sum up your risk to {}, ".format(med_score)
+            intro.append(part4)
+            
+        part2 ='with this information we found that your risk is {}. Maybe we could add some information in order to get a more complete profile'.format(overall_score)
+        intro.append(part2)
+        print(''.join(intro))
+        
+        
+        
         
             
         elif len(empty_slots)==1: 
@@ -364,7 +386,7 @@ while conversation == True:
 
         if (Intents['deny'] == True) or (Intents['goodbye']== True):
 
-            #print('As you want.')
+            print('As you prefer...')
             conversation = False
             DM_vec[3] = 1
             
