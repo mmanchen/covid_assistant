@@ -196,7 +196,7 @@ def prepare_pipeline():
             self.matcher.add('greeting',[greeting_1,greeting_2])
             self.matcher.add('thank',[thank_1])
             self.matcher.add('Accept',[accept_1,accept_2])
-            self.matcher.add('Deny',[deny_1,deny_2])
+            self.matcher.add('Deny',[deny_1,deny_2,deny_3,deny_4])
             self.matcher.add('Goodbye',[goodbye_1,goodbye_2,goodbye_3])
             self.matcher.add('Ask',[ask_1,ask_2,ask_3,ask_4])
 

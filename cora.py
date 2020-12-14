@@ -229,42 +229,42 @@ while conversation == True:
     #############################################
 
 
+    j=0
     #for now it tries to fill all the slots, maybe it would be better if it's more flexible
     while DM_vec[2]==0:
         
         
         empty_slots= f.check_empty_slots(Frame)
+
         
         if len(empty_slots) == 0:
             DM_vec[2]=1
         
-        intro = []
-        part1 = "Let's see, at the moment we have that (pronoun) age is {} years old and (pronoun) live in {}, ".format(Frame['age'],Frame['live_in'])
-        intro.append(part1)
-        
-        if type(Frame['smoker']) == bool:
-            if Frame['smoker'] == True:
-                part3 = "you smoke, "
-                intro.append(part3)
-            if Frame['smoker'] == True:
-                part3 = "you don't smoke, "
-                intro.append(part3)
-                
-        if len(Frame['med_cond_risk']) >0:
-            part4 = "and you have certain medical conditions that sum up your risk to {}, ".format(med_score)
-            intro.append(part4)
-            
-        part2 ='with this information we found that your risk is {}. Maybe we could add some information in order to get a more complete profile'.format(overall_score)
-        intro.append(part2)
-        print(''.join(intro))
-        
-        
-        
+        if j== 0:
+            intro = []
+            part1 = "Let's see, at the moment we have that (pronoun) age is {} years old and (pronoun) live in {}, ".format(Frame['age'],Frame['live_in'])
+            intro.append(part1)
+
+            if type(Frame['smoker']) == bool:
+                if Frame['smoker'] == True:
+                    part3 = "you smoke, "
+                    intro.append(part3)
+                if Frame['smoker'] == False:
+                    part3 = "you don't smoke, "
+                    intro.append(part3)
+
+            if len(Frame['med_cond_risk']) >0:
+                part4 = "you have certain medical conditions that sum up your risk to {}, ".format(med_score)
+                intro.append(part4)
+
+            part2 =""" and that is all...with this information we found that your risk is {}. Maybe we could add some information in order to get a more complete profile.""".format(overall_score)
+            intro.append(part2)
+            print(''.join(intro))
         
             
-        elif len(empty_slots)==1: 
+        if len(empty_slots)==1: 
             responses2=[]
-            resp1= "With a bit more information I could give a better profile, for example, one piece of information is missing."
+            resp1= "For example, one piece of information is missing."
             resp2= " Do you (PRONOUNS CHANGE) {}?".format(empty_slots[0])
             responses2.append(random.choice([resp1]))
             responses2.append(random.choice([resp2]))
@@ -273,15 +273,16 @@ while conversation == True:
             input_text = f.wait_input()
             Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
             response= f.respond_to_intents(Intents,Frame)
+            print(Frame)
             print(response)
             if (empty_slots[0] =='smoke') and (Intents['accept'] ==True):
                 Frame['smoker'] =True
             if (empty_slots[0] =='have any medical conditions') and (Intents['deny'] == True):
                 Frame['med_cond_risk'] =False
             Intents = f.init_intent()
-        elif len(empty_slots)==2:
+        if len(empty_slots)==2:
             responses2=[]
-            resp1= "With a bit more information I could give a better profile, for example, some other information could help."
+            resp1= "I think this other information could also help:"
             resp2= " Do you (PRONOUNS CHANGE) {} or {}?".format(empty_slots[0],empty_slots[1])
             responses2.append(random.choice([resp1]))
             responses2.append(random.choice([resp2]))
@@ -290,7 +291,9 @@ while conversation == True:
             input_text = f.wait_input()
             Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
             response= f.respond_to_intents(Intents,Frame)
+            print(Frame)
             print(response)
+            print(empty_slots)
             if (empty_slots[1] =='have any medical conditions') and (Intents['deny'] == True):
                 Frame['med_cond_risk'] =False
             Intents = f.init_intent()
