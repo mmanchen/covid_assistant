@@ -54,7 +54,7 @@ def respond_to_intents(Intents,Frame):
         if name != 0:
             responses.append(random.choice(['Goodbye {}!'.format(name),'Farewell {}.'.format(name),'Take care {}.'.format(name)]))
         else:   
-            responses.append(random.choice(['Goodbye!','Farewell','Take care', 'I will be here if you need me again :)']))
+            responses.append(random.choice(['Goodbye!','Farewell','Take care']))
     
     #print(responses)
     #responses = random.shuffle(responses)
@@ -163,6 +163,8 @@ def prepare_pipeline():
             accept_1 = [{'lemma': {"REGEX":"(yes|alright|sure)"}}]
 
             accept_2 = [{'POS': 'PRON'},{'LEMMA':'do','OP':'?'},{'LEMMA': 'agree'}]
+            
+            accept_3 = [{'LEMMA':'yes'}]
 
             deny_1 = [{'LEMMA': 'no'},{'IS_PUNCT':True}]
 

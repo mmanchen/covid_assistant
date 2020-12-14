@@ -229,13 +229,13 @@ while conversation == True:
     #############################################
 
 
-    j=0
+j=0
     #for now it tries to fill all the slots, maybe it would be better if it's more flexible
     while DM_vec[2]==0:
         
         
         empty_slots= f.check_empty_slots(Frame)
-
+        print(empty_slots)
         
         if len(empty_slots) == 0:
             DM_vec[2]=1
@@ -273,13 +273,15 @@ while conversation == True:
             input_text = f.wait_input()
             Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
             response= f.respond_to_intents(Intents,Frame)
-            print(Frame)
             print(response)
             if (empty_slots[0] =='smoke') and (Intents['accept'] ==True):
                 Frame['smoker'] =True
+            if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
+                Frame['smoker'] =False
             if (empty_slots[0] =='have any medical conditions') and (Intents['deny'] == True):
                 Frame['med_cond_risk'] =False
             Intents = f.init_intent()
+            print(Frame)
         if len(empty_slots)==2:
             responses2=[]
             resp1= "I think this other information could also help:"
@@ -291,13 +293,19 @@ while conversation == True:
             input_text = f.wait_input()
             Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
             response= f.respond_to_intents(Intents,Frame)
-            print(Frame)
+            empty_slots= f.check_empty_slots(Frame)    
             print(response)
-            print(empty_slots)
+            print(Intents)
             if (empty_slots[1] =='have any medical conditions') and (Intents['deny'] == True):
                 Frame['med_cond_risk'] =False
+            if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
+                Frame['smoker'] =False
+            if (len(empty_slots)==2) and (Intents['accept']== True):
+                print('Which of the two do you mean? I will ask again...')
             Intents = f.init_intent()
+            print(Frame)
 
+        j+=1
 
      #############################################
     # Part where you extract the info from the database and fill in the profile
@@ -353,10 +361,14 @@ while conversation == True:
             mycursor.execute("select score from pregnant where pregnantcol='False'")
             score3 = [x[0] for x in mycursor.fetchall()]
             print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
-
-        list_results = score1 + data + score2 + score3
+        
+        if type(Frame['med_cond_risk'])!= bool:
+            med_score  = np.sum(Frame['med_cond_risk'])
+        else:
+            med_score = 0
+        list_results = score1 + data + score2 + score3+[med_score]
         print("these are the results of the scores obtained ", list_results)
-        overall_score = score1[0] + data[0] + score2[0] + score3[0]
+        overall_score = score1[0] + data[0] + score2[0] + score3[0]+med_score
         print("Your total risk index is", overall_score)
 
         if overall_score == 0:
@@ -372,7 +384,7 @@ while conversation == True:
             print("You belong to the risk group 4:  there is a high risk for you and you should take high precautions.")
     #############################################
 
-    
+        
     #This part tries to see if we need another profiling or we say goodbye
     while DM_vec[3] == 0:
         print('Would you like to know the profile of another person? Maybe your sister, your uncle..')
@@ -385,14 +397,15 @@ while conversation == True:
 
             print('Lets start another query then')
             DM_vec[3] = 1
-            #HERE WE NEED TO FIND A WAY TO GO BACK TO THE START: we need a higher level while loop to control this flow
+            #HERE WE NEED TO FIND A WAY TO GO BACK TO THE START
 
         if (Intents['deny'] == True) or (Intents['goodbye']== True):
 
-            print('As you prefer...')
+            #print('As you want.')
             conversation = False
             DM_vec[3] = 1
             
         response= f.respond_to_intents(Intents,Frame)
         print(response)
+        print('I will be here if you need me again :)')
         iteration += 1
