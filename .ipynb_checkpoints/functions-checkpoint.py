@@ -44,11 +44,11 @@ def respond_to_intents(Intents,Frame):
             
     if Intents['accept']== True:
         
-        responses.append(random.choice(['Perfect then.','Lets do this!','Gotcha!']))
+        responses.append(random.choice(['I see.','Alright!','Gotcha!']))
         
     if Intents['deny']== True:
         
-        responses.append(random.choice(['Alright then.']))
+        responses.append(random.choice(['Alright then.','I see...']))
         
     if Intents['goodbye']== True:
         if name != 0:
@@ -83,7 +83,7 @@ def check_filled_slots(Frame):
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
 
-    print('filled slots:', filled_slots)
+    #print('filled slots:', filled_slots)
     
     return filled_slots
 
@@ -94,13 +94,9 @@ def check_empty_slots(Frame):
     empty_slots=[]
     for k,v in Frame.items():
         if  (type(v)!= list) and (type(v)!= bool) and (v == 0) and (k != 'pronoun') and (k != 'name'):
-            empty_slots.append(k)
-            print('slots that are NOT filled:', k)
-            if k == 'smoker':
-                print(v)
+            empty_slots.append('smoke')
         elif (type(v)== list) and (len(v) == 0) and (k != 'med_cond'):
-            empty_slots.append(k)
-            print('slots that are NOT filled:', k)
+            empty_slots.append('have any medical conditions')
     
     return empty_slots
 
@@ -426,7 +422,7 @@ def prepare_pipeline():
             self.matcher.add('Age',[age_1,age_2])
             self.matcher.add('Personal',[subject1,subject2,subject3])
             self.matcher.add('Pronoun',[subject_p1,subject_p2])
-            self.matcher.add('Location',[live_in1,live_in2])
+            self.matcher.add('Location',[live_in1,live_in2,live_in3])
             self.matcher.add('medium',[medical1_1,medical1_2,medical1_3,medical1_4,medical1_5])
             self.matcher.add('high',[medical2_1,medical2_2,medical2_3,medical2_4,medical2_5,medical2_6,medical2_7,medical2_8])
 
@@ -626,9 +622,9 @@ def intent_slot_filling(text,Frame,Intents):
         Frame['med_cond'].append(med_1)
 
     
-    print(text)
-    print(Frame)
-    print(Intents)
+    #print(text)
+    #print(Frame)
+    #print(Intents)
     
     return Frame, Intents
     

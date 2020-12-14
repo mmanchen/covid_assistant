@@ -230,22 +230,48 @@ while conversation == True:
 
     #for now it tries to fill all the slots, maybe it would be better if it's more flexible
     while DM_vec[2]==0:
-
-
+        
+        
         empty_slots= f.check_empty_slots(Frame)
 
-
+        print(filled_slots)
+        
         if len(empty_slots) == 0:
             DM_vec[2]=1
-
-        else: 
-            for item in empty_slots:
-                print("I need information about {}".format(item))
-                input_text = f.wait_input()
-                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-                response= f.respond_to_intents(Intents,Frame)
-                print(response)
-                Intents = f.init_intent()
+        
+            
+        elif len(empty_slots)==1: 
+            responses2=[]
+            resp1= "With a bit more information I could give a better profile, for example, one piece of information is missing."
+            resp2= " Do you (PRONOUNS CHANGE) {}?".format(empty_slots[0])
+            responses2.append(random.choice([resp1]))
+            responses2.append(random.choice([resp2]))
+            response = ''.join(responses2)
+            print(response)
+            input_text = f.wait_input()
+            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+            response= f.respond_to_intents(Intents,Frame)
+            print(response)
+            if (empty_slots[0] =='smoke') and (Intents['accept'] ==True):
+                Frame['smoker'] =True
+            if (empty_slots[0] =='have any medical conditions') and (Intents['deny'] == True):
+                Frame['med_cond_risk'] =False
+            Intents = f.init_intent()
+        elif len(empty_slots)==2:
+            responses2=[]
+            resp1= "With a bit more information I could give a better profile, for example, some other information could help."
+            resp2= " Do you (PRONOUNS CHANGE) {} or {}?".format(empty_slots[0],empty_slots[1])
+            responses2.append(random.choice([resp1]))
+            responses2.append(random.choice([resp2]))
+            response = ''.join(responses2)
+            print(response)
+            input_text = f.wait_input()
+            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+            response= f.respond_to_intents(Intents,Frame)
+            print(response)
+            if (empty_slots[1] =='have any medical conditions') and (Intents['deny'] == True):
+                Frame['med_cond_risk'] =False
+            Intents = f.init_intent()
 
 
      #############################################
