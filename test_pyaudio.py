@@ -5,7 +5,7 @@ mydb = mysql.connector.connect(host="localhost", user="root", password="hola123"
 mycursor = mydb.cursor()
 
 engine = pyttsx3.init()
-newVoiceRate = 125
+newVoiceRate = 225
 voices = engine.getProperty('voices')
 engine.setProperty('rate',newVoiceRate)
 engine.setProperty('voice', voices[1].id)
@@ -46,6 +46,7 @@ with srg.Microphone() as source:
 
     print("your age is:" + rec.recognize_google(age))
 
+
 print("Where do you live?")
 engine.say('Where do you live?')
 engine.runAndWait()
@@ -56,6 +57,15 @@ with srg.Microphone() as source:
     print("GOTCHA!")
 
     print("you live in :" + rec.recognize_google(loc))
+
+    mycursor.execute("SELECT score FROM location WHERE country=%s", (loc,))
+    data = [x[0] for x in mycursor.fetchall()]
+
+    if data:
+        print("your country risk (", loc, ") is", data)
+
+    else:
+        print("Location does not exist")
 
 print("Do you have any medical conditions?")
 engine.say('Do you have any medical conditions')

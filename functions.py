@@ -79,7 +79,7 @@ def check_filled_slots(Frame):
         if (k=='med_cond_risk'):
             filled_slots['medical_risk'] = np.sum(v)
         if (k == 'med_cond') and ('pregnant' in s for s in v):
-            filled_slots['pregnant'] = True
+            filled_slots['pregnant'] = v
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
 
@@ -399,7 +399,7 @@ def prepare_pipeline():
             medical1_2 = [{'LEMMA':'have','OP':'?'},
                           {'LOWER':'not','OP':'!'},
                           {'LOWER':'multiple','OP':'?'},
-                         {'LOWER':{"REGEX":"(obesity|bronchitis|diabetis|parkinson|sclerosis|diabetis)"}}]
+                         {'LOWER':{"REGEX":"(obesity|bronchitis|diabetes|parkinson|sclerosis|diabetes)"}}]
 
             medical1_3 = [{'LEMMA':'have','OP':'?'},
                           {'LOWER':'not','OP':'!'},
