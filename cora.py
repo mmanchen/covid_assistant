@@ -374,16 +374,35 @@ while DM_vec[2]==0:
         print("Your total risk index is", overall_score)
 
         if overall_score == 0:
-            print("You belong to the risk group 1: there are no risks for you, but that doesn’t mean you can’t have bad luck, be careful!")
+            print("You belong to the risk group 1: there are no risks for you, but that doesn’t mean you can’t have "
+                  "bad luck, be careful!")
+            print("Wear a mask when interacting with others, try to limit your in-person interactions, keep distance "
+                  "when you are near other people, wash your hands often.")
 
         if 1 <= overall_score <= 2:
             print("You belong to the risk group 2: there are low risks for you but you should still take precautions")
+            print("Wear a mask when interacting with others, try to limit your in-person interactions, keep distance "
+                  "when you are near other people, wash your hands often, reduce your stay in public spaces, "
+                  "avoid peak hours, ventilate your home to keep the air fresh.")
 
         if 3 <= overall_score <= 4:
             print(" You belong to the risk group 3: there is a moderate risk for you and you should be cautious.")
+            print("Wear a mask when interacting with others, try to limit your in-person interactions, only go out if "
+                  "its really necessary, limit social activity, do not touch things that people you do not live with "
+                  "have touched, including food and drinks, keep distance "
+                  "when you are near other people, wash your hands often, reduce your stay in public spaces, "
+                  "avoid peak hours, ventilate your home to keep the air fresh.")
 
         if overall_score >= 5:
             print("You belong to the risk group 4:  there is a high risk for you and you should take high precautions.")
+            print("Wear a mask when interacting with others, try to do shopping online or ask family to collect "
+                  "shopping for you, work from home if possible, wash hands for at least 20 seconds, try to stay at "
+                  "least 2 metres away from anyone you do not live with,  try to limit your in-person interactions, "
+                  "only go out if "
+                  "its really necessary, limit social activity, do not touch things that people you do not live with "
+                  "have touched, including food and drinks, keep distance "
+                  "when you are near other people, wash your hands often, reduce your stay in public spaces, "
+                  "avoid peak hours, ventilate your home to keep the air fresh.")
     #############################################
 
         
