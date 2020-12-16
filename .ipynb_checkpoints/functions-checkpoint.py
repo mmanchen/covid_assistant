@@ -28,7 +28,7 @@ def respond_to_intents(Intents,Frame):
     name = Frame['name']
     
     if Intents['ask_help'] == True:
-        responses.append(random.choice(['Of course I will help!','Sure!','I will be glad to.']))
+        responses.append(random.choice(['Of course I will help!','Sure!','I will be glad to help.']))
 
     if Intents['greeting'] == True:
         if name != 0:
@@ -79,7 +79,7 @@ def check_filled_slots(Frame):
         if (k=='med_cond_risk'):
             filled_slots['medical_risk'] = np.sum(v)
         if (k == 'med_cond') and ('pregnant' in s for s in v):
-            filled_slots['pregnant'] = True
+            filled_slots['pregnant'] = v
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
 
@@ -137,8 +137,7 @@ def init_frame():
     #Define  frame dictionary: this dictionary accumulates the info during the whole conversation
     # Note that smoker for 0 is that we don't know but if we don't ask we assume it is a no, if they say no it goes to False
     Frame={'age': 0,'smoker':0,'med_cond_risk':[],
-           'med_cond':[],'live_in': 0,'date': date.today().strftime("%d/%m/%Y"), 'pronoun':0,'name':0}
-
+           'med_cond':[],'live_in': 0,'date': date.today().strftime("%d/%m/%Y"), 'pronoun': 0,'name': 0,'she': False,'he':False,'they': False,'you': False}
     return Frame
 
 
@@ -330,6 +329,26 @@ def prepare_pipeline():
                        {'POS': 'NOUN'},
                           {'ENT_TYPE': 'PERSON'},
                          {'LEMMA': 'be'}]
+            
+            she1 = [{'POS':'DET'}, {'LOWER': {"REGEX":"(mother|sister|girlfriend|aunt|grandma|grandmother|mum)"}}]
+            she2 = [{'LOWER':'she'}]
+            
+            he1 = [{'POS':'DET'}, {'LOWER': {"REGEX":"(dad|father|grandpa|grandfather|uncle|boyfriend)"}}]
+            #he2 = [{'LOWER':'he'}]
+            
+            they1 = [{'POS':'DET'}, {'LOWER': {"REGEX":"(grandparents|parents|cousins)"}}]
+            they2 = [{'LOWER':{"REGEX":"(elders|youth|they)"}}]
+            
+            you1 =  [{'LOWER': 'my'},
+               {'LOWER': 'name'},
+               {'LEMMA': 'be'}]
+            
+            you2 =  [{'LOWER': 'i'},
+               {'LEMMA': 'be'}]
+            
+            you3 =  [{'LOWER': 'i'},
+               {'LEMMA': 'live'}]
+
 
             subject_p1 = [{'DEP':'nsubj'},{'POS': 'PRON'}]
             
@@ -399,7 +418,7 @@ def prepare_pipeline():
             medical1_2 = [{'LEMMA':'have','OP':'?'},
                           {'LOWER':'not','OP':'!'},
                           {'LOWER':'multiple','OP':'?'},
-                         {'LOWER':{"REGEX":"(obesity|bronchitis|diabetis|parkinson|sclerosis|diabetis)"}}]
+                         {'LOWER':{"REGEX":"(obesity|bronchitis|diabetes|parkinson|sclerosis|diabetes)"}}]
 
             medical1_3 = [{'LEMMA':'have','OP':'?'},
                           {'LOWER':'not','OP':'!'},
@@ -427,6 +446,10 @@ def prepare_pipeline():
             self.matcher.add('Location',[live_in1,live_in2,live_in3])
             self.matcher.add('medium',[medical1_1,medical1_2,medical1_3,medical1_4,medical1_5])
             self.matcher.add('high',[medical2_1,medical2_2,medical2_3,medical2_4,medical2_5,medical2_6,medical2_7,medical2_8])
+            self.matcher.add('she',[she1,she2])
+            self.matcher.add('he',[he1])
+            self.matcher.add('they',[they1,they2])
+            self.matcher.add('you',[you1,you2,you3])
 
             Token.set_extension("is_age",default=False)
             Token.set_extension("is_smoker",default=False)
@@ -437,6 +460,10 @@ def prepare_pipeline():
             Token.set_extension("is_living",default=False)
             Token.set_extension("has_med1", default=False)
             Token.set_extension("has_med2", default=False)
+            Token.set_extension("is_she", default=False)
+            Token.set_extension("is_he", default=False)
+            Token.set_extension("is_they", default=False)
+            Token.set_extension("is_you", default=False)
 
 
         def __call__(self,doc):
@@ -519,6 +546,44 @@ def prepare_pipeline():
                     #print(span)
                     for token in entity:  # set values of token attributes
                         token._.set("has_med1", True)
+                        
+                if match_id == hash_string("she"):
+                    entity = Span(doc, start, end, label="she")
+                    span = doc[start:end]  # The matched span
+                    string_id = nlp.vocab.strings[match_id] 
+                    #print('pattern:',string_id)
+                    #print(span)
+                    for token in entity:  # set values of token attributes
+                        token._.set("is_she", True)
+                        
+                if match_id == hash_string("he"):
+                    entity = Span(doc, start, end, label="he")
+                    span = doc[start:end]  # The matched span
+                    string_id = nlp.vocab.strings[match_id] 
+                    #print('pattern:',string_id)
+                    #print(span)
+                    for token in entity:  # set values of token attributes
+                        token._.set("is_he", True)
+                        
+                if match_id == hash_string("they"):
+                    entity = Span(doc, start, end, label="they")
+                    span = doc[start:end]  # The matched span
+                    string_id = nlp.vocab.strings[match_id] 
+                    #print('pattern:',string_id)
+                    #print(span)
+                    for token in entity:  # set values of token attributes
+                        token._.set("is_they", True)
+                        
+                if match_id == hash_string("you"):
+                    entity = Span(doc, start, end, label="you")
+                    span = doc[start:end]  # The matched span
+                    string_id = nlp.vocab.strings[match_id] 
+                    #print('pattern:',string_id)
+                    #print(span)
+                    for token in entity:  # set values of token attributes
+                        token._.set("is_you", True)
+                        
+                
 
             return doc
 
@@ -623,9 +688,27 @@ def intent_slot_filling(text,Frame,Intents):
         Frame['med_cond_risk'].append(1)
         Frame['med_cond'].append(med_1)
 
+        
+    #she
+    if  ([(token.text) for token in doc if token._.is_she]):
+        Frame['she'] = True
+        
+    #she
+    if  ([(token.text) for token in doc if token._.is_he]):
+        Frame['he'] = True
+        
+    #she
+    if  ([(token.text) for token in doc if token._.is_they]):
+        Frame['they'] = True
+        
+    #she
+    if  ([(token.text) for token in doc if token._.is_you]):
+        Frame['you'] = True
+    
+
     
     #print(text)
-    #print(Frame)
+    print(Frame)
     #print(Intents)
     
     return Frame, Intents

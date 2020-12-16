@@ -82,6 +82,7 @@ while conversation == True:
         if (have_age == True) and (have_loc == True):
             DM_vec[1] = 1
             break
+            
         else:
             resp1= 'I will need to ask you a few more questions to fill the query up...'
             resp2 = 'The profile needs some extra required information...'
@@ -93,8 +94,17 @@ while conversation == True:
         if (Frame['age'] == 0) or (f.is_number(Frame['age']) == False):
             resp1= "Let's start with age, could you provide this information?"
             resp2 = "Age is important for this profiling, please provide this information."
-            resp3 = "Without the age I'm sorry but I can't do much."
-            responses1.append(random.choice([resp1,resp2,resp3]))
+            if Frame['she'] == True:
+                resp4 = 'How old is she?'
+            elif Frame['he'] == True:
+                resp4 = 'How old is he?
+            elif Frame['they'] == True:
+                resp4 = 'How old are they, more or less?
+            elif Frame['you'] == True:
+                resp4 = 'How old are you?
+            elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
+                resp4 = "Without the age I'm sorry but I can't do much."
+            responses1.append(random.choice([resp1,resp2,resp4]))
             response = ''.join(responses1)
             print(response)
             input_text = f.wait_input()
@@ -121,8 +131,17 @@ while conversation == True:
         if (Frame['live_in'] == 0):
             resp1= "The location is important to know in order to assess the location risk!"
             resp2 = "I would need to know the country in order to adapt the profiling to the current risk"
-            resp3 = "In which country are we assesing the risk?"
-            responses2.append(random.choice([resp1,resp2,resp3]))
+            if Frame['she'] == True:
+                resp4 = 'Where does she live?'
+            elif Frame['he'] == True:
+                resp4 = 'Where does he live?'
+            elif Frame['they'] == True:
+                resp4 = 'Where do they live?'
+            elif Frame['you'] == True:
+                resp4 = 'Where do you live?'
+            elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
+                resp4 = "In which country are we assesing the risk?"
+            responses2.append(random.choice([resp1,resp2,resp4]))
             response = ''.join(responses2)
             print(response)
             responses2 = [responses2[0]]
@@ -204,111 +223,169 @@ while conversation == True:
     list_results = score1 + data + score2 + score3 + [med_score]
     print("these are the results of the scores obtained ", list_results)
     overall_score = score1[0] + data[0] + score2[0] + score3[0] + med_score
-    print("Your total risk index is", overall_score)
-
-    if overall_score == 0:
-        print("You belong to the risk group 1: there are no risks for you, but that doesn’t mean you can’t have bad luck, be careful!")
-
-    if 1 <= overall_score <= 2:
-        print("You belong to the risk group 2: there are low risks for you but you should still take precautions")
-
-    if 3 <= overall_score <= 4:
-        print(" You belong to the risk group 3: there is a moderate risk for you and you should be cautious.")
-
-    if overall_score >= 5:
-        print("You belong to the risk group 4:  there is a high risk for you and you should take high precautions.")
-
+    print("The total risk index is", overall_score)
 
         
-    # filled_slots['age_score'] = score1
-    # filled_slots['loc_score'] = data
-    # filled_slots['smoker_score'] = score2
-    # filled_slots['pregnant'] = score3
-    #
-    # risk_level = f.sum_risk(filled_slots)
-    #
-    # print("Your total risk index is: {}".format(risk_level))
+    resp_r = []
+    if Frame['she'] == True:
+        resp4 = 'She belongs'
+    if Frame['he'] == True:
+        resp4 = 'He belongs
+    if Frame['they'] == True:
+        resp4 = 'They belong'
+    if Frame['you'] == True:
+        resp4 = 'You belong'
+    if resp4:
+        resp_r.append(resp4)
+    else:
+        resp_r.append('The profile belongs')
+                
+    if overall_score == 0:
+        resp_risk = ("to the risk group 1: there are no risks, but that doesn’t mean you can’t have "
+                  "bad luck, be careful!")
+        resp_r.append(resp_risk)
+        print(''.join(resp_r))
+        print("Wear a mask when interacting with others, try to limit your in-person interactions, keep distance "
+                  "when you are near other people, wash your hands often.")
+
+    if 1 <= overall_score <= 2:
+        resp_risk = ("to the risk group 2: there are low risks but should still take precautions")
+        resp_r.append(resp_risk)
+        print(''.join(resp_r))
+        print("Wear a mask when interacting with others, try to limit your in-person interactions, keep distance "
+                  "when you are near other people, wash your hands often, reduce your stay in public spaces, "
+                  "avoid peak hours, ventilate your home to keep the air fresh.")
+
+    if 3 <= overall_score <= 4:
+        resp_risk = (" to the risk group 3: there is a moderate risk and should be cautious.")
+        resp_r.append(resp_risk)
+        print(''.join(resp_r))
+        print("Wear a mask when interacting with others, try to limit your in-person interactions, only go out if "
+                  "its really necessary, limit social activity, do not touch things that people you do not live with "
+                  "have touched, including food and drinks, keep distance "
+                  "when you are near other people, wash your hands often, reduce your stay in public spaces, "
+                  "avoid peak hours, ventilate your home to keep the air fresh.")
+
+    if overall_score >= 5:
+        resp_risk = ("to the risk group 4:  there is a high risk and should take high precautions.")
+        resp_r.append(resp_risk)
+        print(''.join(resp_r))
+        print("Wear a mask when interacting with others, try to do shopping online or ask family to collect "
+                  "shopping for you, work from home if possible, wash hands for at least 20 seconds, try to stay at "
+                  "least 2 metres away from anyone you do not live with,  try to limit your in-person interactions, "
+                  "only go out if "
+                  "its really necessary, limit social activity, do not touch things that people you do not live with "
+                  "have touched, including food and drinks, keep distance "
+                  "when you are near other people, wash your hands often, reduce your stay in public spaces, "
+                  "avoid peak hours, ventilate your home to keep the air fresh.")
+
+
     #############################################
 
 
-j=0
-#for now it tries to fill all the slots, maybe it would be better if it's more flexible
-while DM_vec[2]==0:
+    j=0
+    #for now it tries to fill all the slots, maybe it would be better if it's more flexible
+    while DM_vec[2]==0:
 
 
-    empty_slots= f.check_empty_slots(Frame)
-    print(empty_slots)
-        
-    if len(empty_slots) == 0:
+        empty_slots= f.check_empty_slots(Frame)
+
+
+        if len(empty_slots) == 0:
             DM_vec[2]=1
-        
-    if j== 0:
+
+        if j== 0:
             intro = []
-            part1 = "Let's see, at the moment we have that (pronoun) age is {} years old and (pronoun) live in {}, ".format(Frame['age'],Frame['live_in'])
+            if Frame['she'] == True:
+                pron = 'her'
+            elif Frame['he'] == True:
+                pron = 'his'
+            elif Frame['they'] == True:
+                prin= 'their'
+            elif Frame['you'] == True:
+                pron= 'your'
+            elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
+                pron= 'the'
+                
+            part1 = "Let's see, at the moment we have that {} age is {} years old and {} live(s) in {}, ".format(pron,Frame['age'],pron,Frame['live_in'])
             intro.append(part1)
 
             if type(Frame['smoker']) == bool:
                 if Frame['smoker'] == True:
-                    part3 = "you smoke, "
+                    part3 = "smoking is factor, "
                     intro.append(part3)
                 if Frame['smoker'] == False:
-                    part3 = "you don't smoke, "
+                    part3 = "smoking is not a factor, "
                     intro.append(part3)
 
             if len(Frame['med_cond_risk']) >0:
-                part4 = "you have certain medical conditions that sum up your risk to {}, ".format(med_score)
+                part4 = "there also are certain medical conditions that sum up the risk to {}, ".format(med_score)
                 intro.append(part4)
 
-            part2 =""" and that is all...with this information we found that your risk is {}. Maybe we could add some information in order to get a more complete profile.""".format(overall_score)
+            part2 =""" and that is all...with this information we found that the risk is {}. Maybe we could add some information in order to get a more complete profile.""".format(overall_score)
             intro.append(part2)
             print(''.join(intro))
-        
-            
-    if len(empty_slots)==1:
-            responses2=[]
-            resp1= "For example, one piece of information is missing."
-            resp2= " Do you (PRONOUNS CHANGE) {}?".format(empty_slots[0])
-            responses2.append(random.choice([resp1]))
-            responses2.append(random.choice([resp2]))
-            response = ''.join(responses2)
-            print(response)
-            input_text = f.wait_input()
-            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-            response= f.respond_to_intents(Intents,Frame)
-            print(response)
-            if (empty_slots[0] =='smoke') and (Intents['accept'] ==True):
-                Frame['smoker'] =True
-            if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
-                Frame['smoker'] =False
-            if (empty_slots[0] =='have any medical conditions') and (Intents['deny'] == True):
-                Frame['med_cond_risk'] =False
-            Intents = f.init_intent()
-            print(Frame)
-    if len(empty_slots)==2:
-            responses2=[]
-            resp1= "I think this other information could also help:"
-            resp2= " Do you (PRONOUNS CHANGE) {} or {}?".format(empty_slots[0],empty_slots[1])
-            responses2.append(random.choice([resp1]))
-            responses2.append(random.choice([resp2]))
-            response = ''.join(responses2)
-            print(response)
-            input_text = f.wait_input()
-            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-            response= f.respond_to_intents(Intents,Frame)
-            empty_slots= f.check_empty_slots(Frame)    
-            print(response)
-            print(Intents)
-            if (empty_slots[1] =='have any medical conditions') and (Intents['deny'] == True):
-                Frame['med_cond_risk'] =False
-            if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
-                Frame['smoker'] =False
-            if (len(empty_slots)==2) and (Intents['accept']== True):
-                print('Which of the two do you mean? I will ask again...')
-            Intents = f.init_intent()
-            print(Frame)
 
-    j+=1
 
+        if len(empty_slots)==1:
+                responses2=[]
+                resp1= "For example, one piece of information is missing."
+                if Frame['she'] == True:
+                    resp2 = 'Does she {}?'.format(empty_slots[0])
+                elif Frame['he'] == True:
+                    resp2 = 'Does he {}?'.format(empty_slots[0])
+                elif Frame['they'] == True:
+                    resp2 = 'Do they {}?'.format(empty_slots[0])
+                elif Frame['you'] == True:
+                    resp2 = 'Do you {}?'.format(empty_slots[0])
+                elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
+                    resp2 = 'Does the person {}?'.format(empty_slots[0])
+                responses2.append([resp1])
+                responses2.append([resp2])
+                response = ''.join(responses2)
+                print(response)
+                input_text = f.wait_input()
+                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+                response= f.respond_to_intents(Intents,Frame)
+                print(response)
+                if (empty_slots[0] =='smoke') and (Intents['accept'] ==True):
+                    Frame['smoker'] =True
+                if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
+                    Frame['smoker'] =False
+                if (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
+                    Frame['med_cond_risk'] =False
+                Intents = f.init_intent()
+        if len(empty_slots)==2:
+                responses2=[]
+                resp1= "I think this other information could also help:"
+                if Frame['she'] == True:
+                    resp2 = 'Does she {} or {}?'.format(empty_slots[0],empty_slots[1])
+                elif Frame['he'] == True:
+                    resp2 = 'Does he {} or {}??'.format(empty_slots[0],empty_slots[1])
+                elif Frame['they'] == True:
+                    resp2 = 'Do they {} or {}??'.format(empty_slots[0],empty_slots[1])
+                elif Frame['you'] == True:
+                    resp2 = 'Do you {} or {}??'.format(empty_slots[0],empty_slots[1])
+                elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
+                    resp2 = 'Does the person {} or {}??'.format(empty_slots[0],empty_slots[1])
+                responses2.append(resp1)
+                responses2.append(resp2)
+                response = ''.join(responses2)
+                print(response)
+                input_text = f.wait_input()
+                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+                response= f.respond_to_intents(Intents,Frame)
+                empty_slots= f.check_empty_slots(Frame)    
+                print(response)
+                if (empty_slots[1] =='have any medical conditions') and (Intents['deny'] == True):
+                    Frame['med_cond_risk'] =False
+                if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
+                    Frame['smoker'] =False
+                if (len(empty_slots)==2) and (Intents['accept']== True):
+                    print('Which of the two do you mean? I will ask again...')
+                Intents = f.init_intent()
+
+        j+=1
      #############################################
     # Part where you extract the info from the database and fill in the profile
     #!!!!!If we did manage to get more information:
@@ -371,22 +448,42 @@ while DM_vec[2]==0:
         list_results = score1 + data + score2 + score3+[med_score]
         print("these are the results of the scores obtained ", list_results)
         overall_score = score1[0] + data[0] + score2[0] + score3[0]+med_score
-        print("Your total risk index is", overall_score)
+        print("The total risk index is", overall_score)
 
+        resp_r = []
+        if Frame['she'] == True:
+            resp4 = 'She belongs'
+        if Frame['he'] == True:
+            resp4 = 'He belongs
+        if Frame['they'] == True:
+            resp4 = 'They belong'
+        if Frame['you'] == True:
+            resp4 = 'You belong'
+        if resp4:
+            resp_r.append(resp4)
+        else:
+            resp_r.append('The profile belongs')
+                
         if overall_score == 0:
-            print("You belong to the risk group 1: there are no risks for you, but that doesn’t mean you can’t have "
+            resp_risk = ("to the risk group 1: there are no risks, but that doesn’t mean you can’t have "
                   "bad luck, be careful!")
+            resp_r.append(resp_risk)
+            print(''.join(resp_r))
             print("Wear a mask when interacting with others, try to limit your in-person interactions, keep distance "
                   "when you are near other people, wash your hands often.")
 
         if 1 <= overall_score <= 2:
-            print("You belong to the risk group 2: there are low risks for you but you should still take precautions")
+            resp_risk = ("to the risk group 2: there are low risks but should still take precautions")
+            resp_r.append(resp_risk)
+            print(''.join(resp_r))
             print("Wear a mask when interacting with others, try to limit your in-person interactions, keep distance "
                   "when you are near other people, wash your hands often, reduce your stay in public spaces, "
                   "avoid peak hours, ventilate your home to keep the air fresh.")
 
         if 3 <= overall_score <= 4:
-            print(" You belong to the risk group 3: there is a moderate risk for you and you should be cautious.")
+            resp_risk = (" to the risk group 3: there is a moderate risk and should be cautious.")
+            resp_r.append(resp_risk)
+            print(''.join(resp_r))
             print("Wear a mask when interacting with others, try to limit your in-person interactions, only go out if "
                   "its really necessary, limit social activity, do not touch things that people you do not live with "
                   "have touched, including food and drinks, keep distance "
@@ -394,7 +491,9 @@ while DM_vec[2]==0:
                   "avoid peak hours, ventilate your home to keep the air fresh.")
 
         if overall_score >= 5:
-            print("You belong to the risk group 4:  there is a high risk for you and you should take high precautions.")
+            resp_risk = ("to the risk group 4:  there is a high risk and should take high precautions.")
+            resp_r.append(resp_risk)
+            print(''.join(resp_r))
             print("Wear a mask when interacting with others, try to do shopping online or ask family to collect "
                   "shopping for you, work from home if possible, wash hands for at least 20 seconds, try to stay at "
                   "least 2 metres away from anyone you do not live with,  try to limit your in-person interactions, "
@@ -403,12 +502,13 @@ while DM_vec[2]==0:
                   "have touched, including food and drinks, keep distance "
                   "when you are near other people, wash your hands often, reduce your stay in public spaces, "
                   "avoid peak hours, ventilate your home to keep the air fresh.")
+
     #############################################
 
         
     #This part tries to see if we need another profiling or we say goodbye
     while DM_vec[3] == 0:
-        print('Would you like to know the profile of another person? Maybe your sister, your uncle..')
+        print('Would you like to know the profile of another person?')
 
         input_text = f.wait_input()
         Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
