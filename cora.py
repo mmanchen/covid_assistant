@@ -40,7 +40,6 @@ while conversation == True:
     #Define  frame dictionary: this dictionary accumulates the info during the whole conversation
 
     Frame= f.init_frame()
-    print(Frame)
     
     if iteration >=1:
         if type(name) != 0:
