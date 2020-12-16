@@ -28,33 +28,33 @@ def respond_to_intents(Intents,Frame):
     name = Frame['name']
     
     if Intents['ask_help'] == True:
-        responses.append(random.choice(['Of course I will help!','Sure!','I will be glad to help.']))
+        responses.append(random.choice([' Of course I will help!',' Sure!',' I will be glad to help.']))
 
     if Intents['greeting'] == True:
         if name != 0:
-            responses.append(random.choice(['Nice to meet you {}.'.format(name),'Hey {}!'.format(name)]))
+            responses.append(random.choice([' Nice to meet you {}.'.format(name),' Hey {}!'.format(name)]))
         else:   
-            responses.append(random.choice(['Nice to meet you.','Hey there!']))
+            responses.append(random.choice([' Nice to meet you.',' Hey there!']))
     
     if Intents['thank']== True:
         if name != 0:
-            responses.append(random.choice(['You are welcome {}'.format(name),'No problem{}'.format(name)]))
+            responses.append(random.choice([' You are welcome {}'.format(name),' No problem{}'.format(name)]))
         else:   
-            responses.append(random.choice(['You are welcome','anytime!','No problem.']))
+            responses.append(random.choice([' You are welcome',' anytime!',' No problem.']))
             
     if Intents['accept']== True:
         
-        responses.append(random.choice(['I see.','Alright!','Gotcha!']))
+        responses.append(random.choice([' I see.',' Alright!',' Gotcha!']))
         
     if Intents['deny']== True:
         
-        responses.append(random.choice(['Alright then.','I see...']))
+        responses.append(random.choice([' Alright then.',' I see...']))
         
     if Intents['goodbye']== True:
         if name != 0:
-            responses.append(random.choice(['Goodbye {}!'.format(name),'Farewell {}.'.format(name),'Take care {}.'.format(name)]))
+            responses.append(random.choice([' Goodbye {}!'.format(name),' Farewell {}.'.format(name),' Take care {}.'.format(name)]))
         else:   
-            responses.append(random.choice(['Goodbye!','Farewell','Take care']))
+            responses.append(random.choice([' Goodbye!',' Farewell',' Take care']))
     
     #print(responses)
     #responses = random.shuffle(responses)
@@ -79,7 +79,7 @@ def check_filled_slots(Frame):
         if (k=='med_cond_risk'):
             filled_slots['medical_risk'] = np.sum(v)
         if (k == 'med_cond') and ('pregnant' in s for s in v):
-            filled_slots['pregnant'] = v
+            filled_slots['pregnant'] = True
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
 
@@ -110,7 +110,7 @@ def wait_input():
         print("Are you there?")
 
     Thread(target = check).start()
-    answer = input("Enter your sentence: ")
+    answer = input(">>>>: ")
     
     return answer
 
@@ -137,7 +137,7 @@ def init_frame():
     #Define  frame dictionary: this dictionary accumulates the info during the whole conversation
     # Note that smoker for 0 is that we don't know but if we don't ask we assume it is a no, if they say no it goes to False
     Frame={'age': 0,'smoker':0,'med_cond_risk':[],
-           'med_cond':[],'live_in': 0,'date': date.today().strftime("%d/%m/%Y"), 'pronoun': 0,'name': 0,'she': False,'he':False,'they': False,'you': False}
+           'med_cond':[],'live_in': 0,'date': date.today().strftime("%d/%m/%Y"), 'pronoun': 0,'name': 0,'she': False,'they': False,'you': False}
     return Frame
 
 
@@ -164,12 +164,15 @@ def prepare_pipeline():
             accept_2 = [{'POS': 'PRON'},{'LEMMA':'do','OP':'?'},{'LEMMA': 'agree'}]
             
             accept_3 = [{'LEMMA':'yes'}]
+            
+            accept_4 = [{'POS':'PRON'},{'LEMMA':'do'},{'LEMMA':'not','OP':'!'}]
 
             deny_1 = [{'LEMMA': 'no'},{'IS_PUNCT':True}]
 
             deny_2 = [{'POS':'PRON'},{'LEMMA':'do','OP':'?'}, {'LEMMA': 'not'},{'LEMMA':{"REGEX":"(want|agree|accept)"}}]
             deny_3 = [{'LEMMA': 'no'},{'LEMMA':'thank'}]
             deny_4 = [{'LEMMA': 'no'}]
+            deny_5 = [{'POS':'PRON'},{'LEMMA':'do'},{'LEMMA':'not'}]
 
             goodbye_1 = [{'LEMMA': 'good'},{'LEMMA': 'bye'}]
 
@@ -196,8 +199,8 @@ def prepare_pipeline():
 
             self.matcher.add('greeting',[greeting_1,greeting_2])
             self.matcher.add('thank',[thank_1])
-            self.matcher.add('Accept',[accept_1,accept_2])
-            self.matcher.add('Deny',[deny_1,deny_2,deny_3,deny_4])
+            self.matcher.add('Accept',[accept_1,accept_2,accept_3,accept_4])
+            self.matcher.add('Deny',[deny_1,deny_2,deny_3,deny_4,deny_5])
             self.matcher.add('Goodbye',[goodbye_1,goodbye_2,goodbye_3])
             self.matcher.add('Ask',[ask_1,ask_2,ask_3,ask_4])
 
@@ -311,24 +314,14 @@ def prepare_pipeline():
                {'POS': 'DET','OP':'?'},
                {'LEMMA': 'smoker'}]
 
-            subject1 = [{'DEP': 'nsubj'},
+            subject1 = [{'LOWER': 'i'},
                {'LEMMA': 'be'},
                {'ENT_TYPE': 'PERSON'}]
             
-            subject2 = [{'POS': 'PRON'},
+            subject2 = [{'LOWER': 'my'},
                {'LOWER': 'name'},
                {'LEMMA': 'be'},
                {'ENT_TYPE': 'PERSON'}]
-            
-            subject4 = [{'POS': 'PRON'},
-               {'LOWER': 'name'},
-               {'LEMMA': 'be'},
-               {'ENT_TYPE': 'PERSON'}]
-            
-            subject3 = [{'LOWER': 'my'},
-                       {'POS': 'NOUN'},
-                          {'ENT_TYPE': 'PERSON'},
-                         {'LEMMA': 'be'}]
             
             she1 = [{'POS':'DET'}, {'LOWER': {"REGEX":"(mother|sister|girlfriend|aunt|grandma|grandmother|mum)"}}]
             she2 = [{'LOWER':'she'}]
@@ -441,7 +434,7 @@ def prepare_pipeline():
             self.matcher.add('smoking pattern',[smoke1,smoke2])
             self.matcher.add('not smoking pattern',[smoke1_n,smoke2_n])
             self.matcher.add('Age',[age_1,age_2])
-            self.matcher.add('Personal',[subject1,subject2,subject3])
+            self.matcher.add('Personal',[subject1,subject2])
             self.matcher.add('Pronoun',[subject_p1,subject_p2])
             self.matcher.add('Location',[live_in1,live_in2,live_in3])
             self.matcher.add('medium',[medical1_1,medical1_2,medical1_3,medical1_4,medical1_5])
@@ -694,8 +687,8 @@ def intent_slot_filling(text,Frame,Intents):
         Frame['she'] = True
         
     #she
-    if  ([(token.text) for token in doc if token._.is_he]):
-        Frame['he'] = True
+    #if  ([(token.text) for token in doc if token._.is_he]):
+    #    Frame['he'] = True
         
     #she
     if  ([(token.text) for token in doc if token._.is_they]):
@@ -708,7 +701,7 @@ def intent_slot_filling(text,Frame,Intents):
 
     
     #print(text)
-    print(Frame)
+    #print(Frame)
     #print(Intents)
     
     return Frame, Intents

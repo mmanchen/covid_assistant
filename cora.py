@@ -16,7 +16,7 @@ import functions as f
 
 f.prepare_pipeline()
 
-#start code for Cora DM
+#### start code for Cora DM
 
 #IDEA: create a function that notices during the whole conversation if any particular or important intent is happening??
 #      not only look for intent when we expect one.
@@ -40,6 +40,11 @@ while conversation == True:
     #Define  frame dictionary: this dictionary accumulates the info during the whole conversation
 
     Frame= f.init_frame()
+    print(Frame)
+    
+    if iteration >=1:
+        if type(name) != 0:
+            Frame['name']=name
 
     # Greeting part
     while DM_vec[0] == 0:
@@ -54,7 +59,7 @@ while conversation == True:
             
         input_text = f.wait_input()
         Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-        print(Intents)
+        print(Frame)
 
         response= f.respond_to_intents(Intents,Frame)
         print(response)
@@ -82,7 +87,6 @@ while conversation == True:
         if (have_age == True) and (have_loc == True):
             DM_vec[1] = 1
             break
-            
         else:
             resp1= 'I will need to ask you a few more questions to fill the query up...'
             resp2 = 'The profile needs some extra required information...'
@@ -92,19 +96,20 @@ while conversation == True:
             
 
         if (Frame['age'] == 0) or (f.is_number(Frame['age']) == False):
-            resp1= "Let's start with age, could you provide this information?"
-            resp2 = "Age is important for this profiling, please provide this information."
+            resp1= "Let's start with age... "
+            resp2 = "Age is important for this profiling. "
             if Frame['she'] == True:
                 resp4 = 'How old is she?'
-            elif Frame['he'] == True:
-                resp4 = 'How old is he?
+            #elif Frame['he'] == True:
+            #    resp4 = 'How old is he?
             elif Frame['they'] == True:
                 resp4 = 'How old are they, more or less?
             elif Frame['you'] == True:
                 resp4 = 'How old are you?
-            elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
-                resp4 = "Without the age I'm sorry but I can't do much."
-            responses1.append(random.choice([resp1,resp2,resp4]))
+            elif (Frame['she']==False) and (Frame['they']==False) and (Frame['you']==False):
+                resp4 = "Please provide this information."
+            responses1.append(random.choice([resp1,resp2]))
+            responses1.append(resp4)
             response = ''.join(responses1)
             print(response)
             input_text = f.wait_input()
@@ -130,18 +135,19 @@ while conversation == True:
             
         if (Frame['live_in'] == 0):
             resp1= "The location is important to know in order to assess the location risk!"
-            resp2 = "I would need to know the country in order to adapt the profiling to the current risk"
+            resp2 = "I would need to know the country in order to adapt the profiling to the current risk... "
             if Frame['she'] == True:
                 resp4 = 'Where does she live?'
-            elif Frame['he'] == True:
-                resp4 = 'Where does he live?'
+            #elif Frame['he'] == True:
+            #    resp4 = 'Where does he live?'
             elif Frame['they'] == True:
                 resp4 = 'Where do they live?'
             elif Frame['you'] == True:
                 resp4 = 'Where do you live?'
-            elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
-                resp4 = "In which country are we assesing the risk?"
-            responses2.append(random.choice([resp1,resp2,resp4]))
+            elif (Frame['she']==False) and (Frame['they']==False) and (Frame['you']==False):
+                resp4 = "In which country are we assesing the risk? "
+            responses2.append(random.choice([resp1,resp2]))
+            responses2.append(resp4)
             response = ''.join(responses2)
             print(response)
             responses2 = [responses2[0]]
@@ -152,8 +158,8 @@ while conversation == True:
                 print(response_int)
             Intents = f.init_intent()
         elif (Frame['live_in'] != 0) and (is_country == False):
-            resp1= "Oh sorry! Maybe I forgot to say that the location needs to be a country!"
-            resp2 = "Hm.. I can't find this location in my database. Could you specify the country?"
+            resp1= "Oh sorry! Maybe I forgot to say that the location needs to be a country! "
+            resp2 = "Hm.. I can't find this location in my database. Could you specify the country? "
             resp3 = "I got a little bit lost, which country is it?"
             responses2.append(random.choice([resp1,resp2,resp3]))
             response = ''.join(responses2)
@@ -229,8 +235,6 @@ while conversation == True:
     resp_r = []
     if Frame['she'] == True:
         resp4 = 'She belongs'
-    if Frame['he'] == True:
-        resp4 = 'He belongs
     if Frame['they'] == True:
         resp4 = 'They belong'
     if Frame['you'] == True:
@@ -282,8 +286,8 @@ while conversation == True:
 
     #############################################
 
-
     j=0
+    empty_slots_in= f.check_empty_slots(Frame)
     #for now it tries to fill all the slots, maybe it would be better if it's more flexible
     while DM_vec[2]==0:
 
@@ -297,17 +301,22 @@ while conversation == True:
         if j== 0:
             intro = []
             if Frame['she'] == True:
-                pron = 'her'
-            elif Frame['he'] == True:
-                pron = 'his'
+                pron1 = 'her'
+                pron2 = 'she lives'
+            #elif Frame['he'] == True:
+            #    pron1 = 'his'
+            #    pron2 = 'he lives'
             elif Frame['they'] == True:
-                prin= 'their'
+                pron1= 'their'
+                pron2 = 'they live'
             elif Frame['you'] == True:
-                pron= 'your'
-            elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
-                pron= 'the'
+                pron1= 'your'
+                pron2 = 'you live'
+            elif (Frame['she']==False) and (Frame['they']==False) and (Frame['you']==False):
+                pron1= 'the'
+                pron2 = 'the person lives'
                 
-            part1 = "Let's see, at the moment we have that {} age is {} years old and {} live(s) in {}, ".format(pron,Frame['age'],pron,Frame['live_in'])
+            part1 = "Let's see, at the moment we have that {} age is {} years old and {} in {}, ".format(pron1,Frame['age'],pron2,Frame['live_in'])
             intro.append(part1)
 
             if type(Frame['smoker']) == bool:
@@ -322,68 +331,69 @@ while conversation == True:
                 part4 = "there also are certain medical conditions that sum up the risk to {}, ".format(med_score)
                 intro.append(part4)
 
-            part2 =""" and that is all...with this information we found that the risk is {}. Maybe we could add some information in order to get a more complete profile.""".format(overall_score)
+            part2 ="""and that is all...with this information we found that the risk is {}. Maybe we could add some information in order to get a more complete profile.""".format(overall_score)
             intro.append(part2)
             print(''.join(intro))
 
 
         if len(empty_slots)==1:
-                responses2=[]
-                resp1= "For example, one piece of information is missing."
-                if Frame['she'] == True:
-                    resp2 = 'Does she {}?'.format(empty_slots[0])
-                elif Frame['he'] == True:
-                    resp2 = 'Does he {}?'.format(empty_slots[0])
-                elif Frame['they'] == True:
-                    resp2 = 'Do they {}?'.format(empty_slots[0])
-                elif Frame['you'] == True:
-                    resp2 = 'Do you {}?'.format(empty_slots[0])
-                elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
-                    resp2 = 'Does the person {}?'.format(empty_slots[0])
-                responses2.append([resp1])
-                responses2.append([resp2])
-                response = ''.join(responses2)
-                print(response)
-                input_text = f.wait_input()
-                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-                response= f.respond_to_intents(Intents,Frame)
-                print(response)
-                if (empty_slots[0] =='smoke') and (Intents['accept'] ==True):
-                    Frame['smoker'] =True
-                if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
-                    Frame['smoker'] =False
-                if (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
-                    Frame['med_cond_risk'] =False
-                Intents = f.init_intent()
+            responses2=[]
+            resp1= "One more piece of information is missing."
+            if Frame['she'] == True:
+                resp2 = 'Does she {}?'.format(empty_slots[0])
+            #elif Frame['he'] == True:
+            #    resp2 = ' Does he {}?'.format(empty_slots[0])
+            elif Frame['they'] == True:
+                resp2 = ' Do they {}?'.format(empty_slots[0])
+            elif Frame['you'] == True:
+                resp2 = ' Do you {}?'.format(empty_slots[0])
+            elif (Frame['she']==False) and (Frame['they']==False) and (Frame['you']==False):
+                resp2 = ' Does the person {}?'.format(empty_slots[0])
+            responses2.append(resp1)
+            responses2.append(resp2)
+            response = ''.join(responses2)
+            print(response)
+            input_text = f.wait_input()
+            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+            response= f.respond_to_intents(Intents,Frame)
+            print(response)
+            if (empty_slots[0] =='smoke') and (Intents['accept'] ==True):
+                Frame['smoker'] =True
+            if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
+                Frame['smoker'] =False
+            if (empty_slots[0] =='have any medical conditions') and (Intents['deny'] ==True):
+                Frame['med_cond_risk'] =False
+            Intents = f.init_intent()
         if len(empty_slots)==2:
-                responses2=[]
-                resp1= "I think this other information could also help:"
-                if Frame['she'] == True:
-                    resp2 = 'Does she {} or {}?'.format(empty_slots[0],empty_slots[1])
-                elif Frame['he'] == True:
-                    resp2 = 'Does he {} or {}??'.format(empty_slots[0],empty_slots[1])
-                elif Frame['they'] == True:
-                    resp2 = 'Do they {} or {}??'.format(empty_slots[0],empty_slots[1])
-                elif Frame['you'] == True:
-                    resp2 = 'Do you {} or {}??'.format(empty_slots[0],empty_slots[1])
-                elif (Frame['she']==False) and (Frame['he']==False) and (Frame['they']==False) and (Frame['you']==False):
-                    resp2 = 'Does the person {} or {}??'.format(empty_slots[0],empty_slots[1])
-                responses2.append(resp1)
-                responses2.append(resp2)
-                response = ''.join(responses2)
-                print(response)
-                input_text = f.wait_input()
-                Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-                response= f.respond_to_intents(Intents,Frame)
-                empty_slots= f.check_empty_slots(Frame)    
-                print(response)
-                if (empty_slots[1] =='have any medical conditions') and (Intents['deny'] == True):
-                    Frame['med_cond_risk'] =False
-                if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
-                    Frame['smoker'] =False
-                if (len(empty_slots)==2) and (Intents['accept']== True):
-                    print('Which of the two do you mean? I will ask again...')
-                Intents = f.init_intent()
+            responses2=[]
+            resp1= "I think this other information could also help:"
+            if Frame['she'] == True:
+                resp2 = ' Does she {} or {}?'.format(empty_slots[0],empty_slots[1])
+            #elif Frame['he'] == True:
+            #    resp2 = ' Does he {} or {}??'.format(empty_slots[0],empty_slots[1])
+            elif Frame['they'] == True:
+                resp2 = ' Do they {} or {}??'.format(empty_slots[0],empty_slots[1])
+            elif Frame['you'] == True:
+                resp2 = ' Do you {} or {}??'.format(empty_slots[0],empty_slots[1])
+            elif (Frame['she']==False) and (Frame['they']==False) and (Frame['you']==False):
+                resp2 = ' Does the person {} or {}??'.format(empty_slots[0],empty_slots[1])
+            responses2.append(resp1)
+            responses2.append(resp2)
+            response = ''.join(responses2)
+            print(response)
+            input_text = f.wait_input()            
+            Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
+            response= f.respond_to_intents(Intents,Frame)
+            print(response)
+            if (empty_slots[1] =='have any medical conditions') and (Intents['deny'] == True):
+                Frame['med_cond_risk'] =False
+            if (empty_slots[0] =='smoke') and (Intents['deny'] ==True):
+                Frame['smoker'] =False
+            empty_slots_3= f.check_empty_slots(Frame)    
+            if (len(empty_slots_3)==2) and (Intents['accept']== True):
+                print('Which of the two do you mean? I will ask again...')
+            Intents = f.init_intent()
+            
 
         j+=1
      #############################################
@@ -392,7 +402,7 @@ while conversation == True:
     # here we would repeat the connection to the database and the profiling, otherwise we continue
     
     empty_slots_2= f.check_empty_slots(Frame)
-    if empty_slots_2 != empty_slots:
+    if (len(empty_slots_2) != len(empty_slots_in)) and ((Frame['smoker'] !=False) and (Frame['med_cond_risk'] !=False)):
     
         filled_slots= f.check_filled_slots(Frame)
 
@@ -453,12 +463,11 @@ while conversation == True:
         resp_r = []
         if Frame['she'] == True:
             resp4 = 'She belongs'
-        if Frame['he'] == True:
-            resp4 = 'He belongs
         if Frame['they'] == True:
             resp4 = 'They belong'
         if Frame['you'] == True:
             resp4 = 'You belong'
+            
         if resp4:
             resp_r.append(resp4)
         else:
@@ -503,16 +512,18 @@ while conversation == True:
                   "when you are near other people, wash your hands often, reduce your stay in public spaces, "
                   "avoid peak hours, ventilate your home to keep the air fresh.")
 
+    else:
+        print('The risk stays the same!')
     #############################################
-
-        
+    
     #This part tries to see if we need another profiling or we say goodbye
     while DM_vec[3] == 0:
-        print('Would you like to know the profile of another person?')
+        print('Would you like to know the profile of another person? ')
 
         input_text = f.wait_input()
         Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-        
+        response= f.respond_to_intents(Intents,Frame)
+        print(response)
 
         if Intents['accept'] == True:
 
@@ -524,9 +535,10 @@ while conversation == True:
 
             #print('As you want.')
             conversation = False
+            print('I will be here if you need me again :)')
             DM_vec[3] = 1
             
-        response= f.respond_to_intents(Intents,Frame)
-        print(response)
-        print('I will be here if you need me again :)')
+        name = Frame['name']
+            
+        
         iteration += 1
