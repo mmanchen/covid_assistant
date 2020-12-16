@@ -58,7 +58,6 @@ while conversation == True:
             
         input_text = f.wait_input()
         Frame, Intents = f.intent_slot_filling(input_text,Frame,Intents)
-        print(Frame)
 
         response= f.respond_to_intents(Intents,Frame)
         print(response)
@@ -102,9 +101,9 @@ while conversation == True:
             #elif Frame['he'] == True:
             #    resp4 = 'How old is he?
             elif Frame['they'] == True:
-                resp4 = 'How old are they, more or less?
+                resp4 = 'How old are they, more or less?'
             elif Frame['you'] == True:
-                resp4 = 'How old are you?
+                resp4 = 'How old are you?'
             elif (Frame['she']==False) and (Frame['they']==False) and (Frame['you']==False):
                 resp4 = "Please provide this information."
             responses1.append(random.choice([resp1,resp2]))
@@ -213,35 +212,26 @@ while conversation == True:
         score2 = [x[0] for x in mycursor.fetchall()]
         print("your smoker risk (", dict.get("smoker"), ") is", score2)
 
-    # Pregnant
-    if dict.get("pregnant")==True:
-        mycursor.execute("select score from pregnant where pregnantcol='True'")
-        score3 = [x[0] for x in mycursor.fetchall()]
-        print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
-
-    else:
-        mycursor.execute("select score from pregnant where pregnantcol='False'")
-        score3 = [x[0] for x in mycursor.fetchall()]
-        print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
-
     med_score  = np.sum(Frame['med_cond_risk'])
-    list_results = score1 + data + score2 + score3 + [med_score]
+    print("your medical condition risk is {}".format(med_score))
+    
+    list_results = score1 + data + score2+ [med_score]
     print("these are the results of the scores obtained ", list_results)
-    overall_score = score1[0] + data[0] + score2[0] + score3[0] + med_score
+    overall_score = score1[0] + data[0] + score2[0] + med_score
     print("The total risk index is", overall_score)
 
         
     resp_r = []
     if Frame['she'] == True:
-        resp4 = 'She belongs'
+        resp4 = 'She belongs '
     if Frame['they'] == True:
-        resp4 = 'They belong'
+        resp4 = 'They belong '
     if Frame['you'] == True:
-        resp4 = 'You belong'
+        resp4 = 'You belong '
     if resp4:
         resp_r.append(resp4)
     else:
-        resp_r.append('The profile belongs')
+        resp_r.append('The profile belongs ')
                 
     if overall_score == 0:
         resp_risk = ("to the risk group 1: there are no risks, but that doesn’t mean you can’t have "
@@ -401,7 +391,7 @@ while conversation == True:
     # here we would repeat the connection to the database and the profiling, otherwise we continue
     
     empty_slots_2= f.check_empty_slots(Frame)
-    if (len(empty_slots_2) != len(empty_slots_in)) and ((Frame['smoker'] !=False) and (Frame['med_cond_risk'] !=False)):
+    if (len(empty_slots_2) != len(empty_slots_in)) and ((Frame['smoker'] !=False) or (Frame['med_cond_risk'] !=False)):
     
         filled_slots= f.check_filled_slots(Frame)
 
@@ -439,38 +429,26 @@ while conversation == True:
             score2 = [x[0] for x in mycursor.fetchall()]
             print("your smoker risk (", dict.get("smoker"), ") is", score2)
 
-        # Pregnant
-        if dict.get("pregnant")==True:
-            mycursor.execute("select score from pregnant where pregnantcol='True'")
-            score3 = [x[0] for x in mycursor.fetchall()]
-            print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
-
-        else:
-            mycursor.execute("select score from pregnant where pregnantcol='False'")
-            score3 = [x[0] for x in mycursor.fetchall()]
-            print("your pregnant risk (", dict.get("pregnant"), ") is", score3)
-        
-        if type(Frame['med_cond_risk'])!= bool:
-            med_score  = np.sum(Frame['med_cond_risk'])
-        else:
-            med_score = 0
-        list_results = score1 + data + score2 + score3+[med_score]
+        med_score  = np.sum(Frame['med_cond_risk'])
+        print("your medical condition risk is {}".format(med_score))
+    
+        list_results = score1 + data + score2+ [med_score]
         print("these are the results of the scores obtained ", list_results)
-        overall_score = score1[0] + data[0] + score2[0] + score3[0]+med_score
+        overall_score = score1[0] + data[0] + score2[0] + med_score
         print("The total risk index is", overall_score)
 
+        
         resp_r = []
         if Frame['she'] == True:
-            resp4 = 'She belongs'
+            resp4 = 'She belongs '
         if Frame['they'] == True:
-            resp4 = 'They belong'
+            resp4 = 'They belong '
         if Frame['you'] == True:
-            resp4 = 'You belong'
-            
+            resp4 = 'You belong '
         if resp4:
             resp_r.append(resp4)
         else:
-            resp_r.append('The profile belongs')
+            resp_r.append('The profile belongs ')
                 
         if overall_score == 0:
             resp_risk = ("to the risk group 1: there are no risks, but that doesn’t mean you can’t have "

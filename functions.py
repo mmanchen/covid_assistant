@@ -78,8 +78,6 @@ def check_filled_slots(Frame):
             filled_slots['loc'] = v
         if (k=='med_cond_risk'):
             filled_slots['medical_risk'] = np.sum(v)
-        if (k == 'med_cond') and ('pregnant' in s for s in v):
-            filled_slots['pregnant'] = True
         if (k=='smoker') and (type(v) == bool):
             filled_slots['smoker'] = v
 
