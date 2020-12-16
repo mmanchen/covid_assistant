@@ -102,9 +102,9 @@ while conversation == True:
             #elif Frame['he'] == True:
             #    resp4 = 'How old is he?
             elif Frame['they'] == True:
-                resp4 = 'How old are they, more or less?
+                resp4 = 'How old are they, more or less?'
             elif Frame['you'] == True:
-                resp4 = 'How old are you?
+                resp4 = 'How old are you?'
             elif (Frame['she']==False) and (Frame['they']==False) and (Frame['you']==False):
                 resp4 = "Please provide this information."
             responses1.append(random.choice([resp1,resp2]))
